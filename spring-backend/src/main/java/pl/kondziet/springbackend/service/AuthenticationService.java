@@ -1,33 +1,28 @@
 package pl.kondziet.springbackend.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.model.DTO.*;
 import pl.kondziet.springbackend.model.entity.User;
 import pl.kondziet.springbackend.repository.UserRepository;
+import pl.kondziet.springbackend.security.token.JwtService;
 import pl.kondziet.springbackend.security.token.TokenService;
-
-import java.io.IOException;
 
 @AllArgsConstructor
 @Service
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private TokenService tokenService;
-    private AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public SignUpResponse register(SignUpRequest registerRequest) {
         User user = User.builder()
@@ -66,11 +61,11 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Invalid Authorization Header");
         }
         String refreshToken = authorizationHeader.substring(7);
-        String userEmail = tokenService.extractUserEmail(refreshToken);
+        String userEmail = jwtService.extractUserEmail(refreshToken);
 
         if (userEmail != null) {
             UserDetails userDetails = userRepository.findByEmail(userEmail).orElseThrow();
-            if (tokenService.isTokenValid(refreshToken, userDetails)) {
+            if (jwtService.isTokenValid(refreshToken, userDetails)) {
                 String accessToken = tokenService.generateAccessToken(userDetails);
                 return TokenRefreshResponse.builder()
                         .accessToken(accessToken)

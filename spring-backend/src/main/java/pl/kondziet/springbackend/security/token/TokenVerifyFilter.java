@@ -21,7 +21,7 @@ import java.io.IOException;
 public class TokenVerifyFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
-    private final TokenService tokenService;
+    private final JwtService jwtService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -31,11 +31,11 @@ public class TokenVerifyFilter extends OncePerRequestFilter {
             return;
         }
         String token = authorizationHeader.substring(7);
-        String userEmail = tokenService.extractUserEmail(token);
+        String userEmail = jwtService.extractUserEmail(token);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            if (tokenService.isTokenValid(token, userDetails)) {
+            if (jwtService.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
