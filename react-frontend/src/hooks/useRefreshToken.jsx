@@ -1,6 +1,4 @@
-import publicClientRequest, {
-  privateClientRequest,
-} from "../api/ClientRequest";
+import { privateClientRequest } from "../api/ClientRequest";
 import useAuthenticationContext from "./useAuthenticationContext";
 
 const useRefreshToken = () => {
