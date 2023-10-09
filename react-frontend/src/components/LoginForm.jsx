@@ -12,7 +12,7 @@ const LoginForm = ({ onToggle }) => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { setAuthentication } = useAuthenticationContext();
+  const { login } = useAuthenticationContext();
 
   const navigate = useNavigate();
 
@@ -27,12 +27,8 @@ const LoginForm = ({ onToggle }) => {
           password: passwordInput,
         }
       );
-      const authentication = {
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken
-      }
-      setAuthentication(authentication);
-      localStorage.setItem("refreshToken", authentication.refreshToken);
+
+      login(response.data.accessToken, response.data.refreshToken);
 
       setEmailInput("");
       setPasswordInput("");

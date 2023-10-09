@@ -4,10 +4,9 @@ import publicClientRequest, {
 import useAuthenticationContext from "./useAuthenticationContext";
 
 const useRefreshToken = () => {
-  const { setAuthentication } = useAuthenticationContext();
-  const refreshToken = localStorage.getItem("refreshToken");
+  const { refreshToken, login } = useAuthenticationContext();
 
-  const refresh = async () => {
+  const retrieveNewAccessToken = async () => {
     const response = await privateClientRequest.post(
       "/api/authentication/refresh-token",
       null,
@@ -17,18 +16,12 @@ const useRefreshToken = () => {
         },
       }
     );
-    setAuthentication((previous) => {
-      console.log(JSON.stringify(previous));
-      console.log(response.data.accessToken);
-      return {
-        ...previous,
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
-      };
-    });
+
+    login(response.data.accessToken, response.data.refreshToken);
+
     return response.data.accessToken;
   };
-  return refresh;
+  return retrieveNewAccessToken;
 };
 
 export default useRefreshToken;

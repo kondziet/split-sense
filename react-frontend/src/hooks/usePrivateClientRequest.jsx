@@ -4,14 +4,14 @@ import { privateClientRequest } from "../api/ClientRequest";
 import useRefreshToken from "./useRefreshToken";
 
 const usePrivateClientRequest = () => {
-  const { authentication } = useAuthenticationContext();
+  const { accessToken } = useAuthenticationContext();
   const retrieveNewAccessToken = useRefreshToken();
 
   useEffect(() => {
     const requestIntercept = privateClientRequest.interceptors.request.use(
       (config) => {
         if (!config.headers.Authorization) {
-          config.headers.Authorization = `Bearer ${authentication?.accessToken}`;
+          config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -38,7 +38,7 @@ const usePrivateClientRequest = () => {
     };
 
     return cleanup;
-  }, [authentication, retrieveNewAccessToken]);
+  }, [accessToken, retrieveNewAccessToken]);
 
   return privateClientRequest;
 };
