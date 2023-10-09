@@ -1,17 +1,24 @@
 package pl.kondziet.springbackend.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.model.DTO.SignInRequest;
-import pl.kondziet.springbackend.model.DTO.SignInResponse;
-import pl.kondziet.springbackend.model.DTO.SignUpRequest;
-import pl.kondziet.springbackend.model.DTO.SignUpResponse;
+import pl.kondziet.springbackend.model.DTO.*;
 import pl.kondziet.springbackend.model.entity.User;
 import pl.kondziet.springbackend.repository.UserRepository;
 import pl.kondziet.springbackend.security.token.TokenService;
+
+import java.io.IOException;
 
 @AllArgsConstructor
 @Service
@@ -44,10 +51,35 @@ public class AuthenticationService {
         );
 
         User user = userRepository.findByEmail(signInRequest.getEmail()).orElseThrow();
-        String JwtToken = tokenService.generateToken(user);
+        String generatedAccessToken = tokenService.generateAccessToken(user);
+        String generatedRefreshToken = tokenService.generateRefreshToken(user);
+
         return SignInResponse.builder()
-                .token(JwtToken)
+                .accessToken(generatedAccessToken)
+                .refreshToken(generatedRefreshToken)
                 .build();
+    }
+
+    public TokenRefreshResponse refreshToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization Header");
+        }
+        String refreshToken = authorizationHeader.substring(7);
+        String userEmail = tokenService.extractUserEmail(refreshToken);
+
+        if (userEmail != null) {
+            UserDetails userDetails = userRepository.findByEmail(userEmail).orElseThrow();
+            if (tokenService.isTokenValid(refreshToken, userDetails)) {
+                String accessToken = tokenService.generateAccessToken(userDetails);
+                return TokenRefreshResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid Email in Refresh Token");
     }
 
 }

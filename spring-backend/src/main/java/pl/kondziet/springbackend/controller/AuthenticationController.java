@@ -1,13 +1,14 @@
 package pl.kondziet.springbackend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.kondziet.springbackend.model.DTO.SignInRequest;
 import pl.kondziet.springbackend.service.AuthenticationService;
+
+import java.io.IOException;
 
 @AllArgsConstructor
 @RestController
@@ -16,8 +17,12 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(signInRequest));
+    }
+    @PostMapping("/refresh-token")
+    ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        return ResponseEntity.ok(authenticationService.refreshToken(request));
     }
 }
