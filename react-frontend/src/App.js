@@ -3,12 +3,12 @@ import AuthenticationPage from "./pages/AuthenticationPage";
 import { AuthenticationProvider } from "./context/AuthenticationContext";
 import HomePage from "./pages/HomePage";
 import AppLayout from "./components/AppLayout";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import ProtectedRoutes from "./api/ProtectedRoutes";
 
 function App() {
   return (
-    <div>
+    <div className="h-screen">
       <BrowserRouter>
         <AuthenticationProvider>
           <Routes>

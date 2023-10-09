@@ -21,14 +21,18 @@ const LoginForm = ({ onToggle }) => {
 
     try {
       const response = await publicClientRequest.post(
-        "/api/authentication/signin",
+        "/api/authentication/sign-in",
         {
           email: emailInput,
           password: passwordInput,
         }
       );
-      const accessToken = response.data.token;
-      setAuthentication({ accessToken });
+      const authentication = {
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken
+      }
+      setAuthentication(authentication);
+      localStorage.setItem("refreshToken", authentication.refreshToken);
 
       setEmailInput("");
       setPasswordInput("");
