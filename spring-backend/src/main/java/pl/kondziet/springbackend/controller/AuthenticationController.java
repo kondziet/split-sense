@@ -1,14 +1,11 @@
 package pl.kondziet.springbackend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kondziet.springbackend.model.DTO.SignInRequest;
+import pl.kondziet.springbackend.model.dto.SignInRequest;
 import pl.kondziet.springbackend.service.AuthenticationService;
-
-import java.io.IOException;
 
 @AllArgsConstructor
 @RestController

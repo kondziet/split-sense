@@ -30,10 +30,10 @@ public class SecurityConfiguration {
 
         httpSecurity.cors().configurationSource(request -> {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-            corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-            corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-            corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
+            corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+            corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            corsConfiguration.setAllowedHeaders(List.of("*"));
+            corsConfiguration.setExposedHeaders(List.of("Authorization"));
             corsConfiguration.setAllowCredentials(true);
             return corsConfiguration;
         });
@@ -58,16 +58,4 @@ public class SecurityConfiguration {
         return httpSecurity.build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//
-//        return source;
-//    }
 }

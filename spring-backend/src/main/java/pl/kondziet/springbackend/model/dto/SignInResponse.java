@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.model.DTO;
+package pl.kondziet.springbackend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenRefreshResponse {
+public class SignInResponse {
 
     private String accessToken;
     private String refreshToken;

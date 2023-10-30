@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.model.DTO;
+package pl.kondziet.springbackend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SignUpResponse {
+public class TokenRefreshResponse {
 
-    private String message;
+    private String accessToken;
+    private String refreshToken;
 }

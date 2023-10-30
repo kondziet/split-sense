@@ -1,17 +1,13 @@
 package pl.kondziet.springbackend.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Persistent;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -27,6 +23,10 @@ public class User implements UserDetails {
     private String username;
     private String email;
     private String password;
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<UserGroup> userGroups = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
