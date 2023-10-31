@@ -1,6 +1,8 @@
 package pl.kondziet.springbackend.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.model.entity.User;
 import pl.kondziet.springbackend.repository.UserRepository;
@@ -17,8 +19,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Cacheable(value = "users", key = "#email")
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow();
+    }
+
+    @CacheEvict(value = "users", key = "#email")
+    @Override
+    public void updateEmail(User user, String email) {
+        user.setEmail(email);
     }
 }
