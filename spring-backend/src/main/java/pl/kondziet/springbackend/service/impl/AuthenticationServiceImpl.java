@@ -27,9 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public SignUpResponse register(SignUpRequest registerRequest) {
         User user = User.builder()
-                .username(registerRequest.getUsername())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .username(registerRequest.username())
+                .email(registerRequest.email())
+                .password(passwordEncoder.encode(registerRequest.password()))
                 .build();
 
         userService.save(user);
@@ -41,12 +41,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public SignInResponse authenticate(SignInRequest signInRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        signInRequest.getEmail(),
-                        signInRequest.getPassword()
+                        signInRequest.email(),
+                        signInRequest.password()
                 )
         );
 
-        User user = userService.findByEmail(signInRequest.getEmail());
+        User user = userService.findByEmail(signInRequest.email());
         String generatedAccessToken = tokenService.generateAccessToken(user);
         String generatedRefreshToken = tokenService.generateRefreshToken(user);
 

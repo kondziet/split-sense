@@ -1,10 +1,4 @@
 package pl.kondziet.springbackend.model.dto;
 
-import lombok.Data;
-
-@Data
-public class SignInRequest {
-
-    private String email;
-    private String password;
+public record SignInRequest(String email, String password) {
 }
