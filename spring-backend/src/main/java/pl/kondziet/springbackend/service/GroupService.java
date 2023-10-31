@@ -9,4 +9,5 @@ public interface GroupService {
 
     Group save(Group user);
     List<Group> findAllUserGroups(User user);
+    Group createNewGroup(Group group, User owner);
 }

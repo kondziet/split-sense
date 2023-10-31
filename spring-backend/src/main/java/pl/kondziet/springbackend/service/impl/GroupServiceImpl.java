@@ -1,10 +1,13 @@
 package pl.kondziet.springbackend.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
+import pl.kondziet.springbackend.model.entity.UserGroup;
 import pl.kondziet.springbackend.repository.GroupRepository;
+import pl.kondziet.springbackend.repository.UserGroupRepository;
 import pl.kondziet.springbackend.service.GroupService;
 
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
+    private final UserGroupRepository userGroupRepository;
 
     @Override
     public Group save(Group group) {
@@ -23,6 +27,26 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> findAllUserGroups(User user) {
         return groupRepository.findAllUserGroupsByEmail(user);
+    }
+
+    @Transactional
+    @Override
+    public Group createNewGroup(Group group, User owner) {
+        UserGroup userGroup = UserGroup.builder()
+                .id(UserGroup.UserGroupId.builder()
+                        .userId(owner.getId())
+                        .groupId(group.getId())
+                        .build()
+                )
+                .user(owner)
+                .group(group)
+                .build();
+
+        userGroupRepository.save(userGroup);
+
+        group.setOwner(owner);
+
+        return group;
     }
 
 

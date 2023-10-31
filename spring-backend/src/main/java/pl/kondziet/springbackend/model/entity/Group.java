@@ -21,6 +21,8 @@ public class Group implements Serializable {
     private UUID id;
     private String name;
     private String currency;
+    @ManyToOne
+    private User owner;
 
     @OneToMany(mappedBy = "group")
     @Builder.Default
