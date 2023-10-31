@@ -32,6 +32,10 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public Group createNewGroup(Group group, User owner) {
+
+        group.setOwner(owner);
+        Group savedGroup = save(group);
+
         UserGroup userGroup = UserGroup.builder()
                 .id(UserGroup.UserGroupId.builder()
                         .userId(owner.getId())
@@ -44,9 +48,7 @@ public class GroupServiceImpl implements GroupService {
 
         userGroupRepository.save(userGroup);
 
-        group.setOwner(owner);
-
-        return group;
+        return savedGroup;
     }
 
 
