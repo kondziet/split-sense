@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.repository.TokenRepository;
+import pl.kondziet.springbackend.repository.jpa.TokenRepository;
 
 import java.util.Map;
 
