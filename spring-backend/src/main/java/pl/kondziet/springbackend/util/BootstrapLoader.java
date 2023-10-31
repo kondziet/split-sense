@@ -12,8 +12,6 @@ import pl.kondziet.springbackend.service.GroupService;
 import pl.kondziet.springbackend.service.UserGroupService;
 import pl.kondziet.springbackend.service.UserService;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @Component
 public class BootstrapLoader implements CommandLineRunner {
