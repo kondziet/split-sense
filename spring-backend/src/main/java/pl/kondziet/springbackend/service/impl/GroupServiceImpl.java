@@ -1,14 +1,14 @@
 package pl.kondziet.springbackend.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import pl.kondziet.springbackend.model.dto.GroupRequest;
 import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.model.entity.UserGroup;
-import pl.kondziet.springbackend.repository.GroupRepository;
-import pl.kondziet.springbackend.repository.UserGroupRepository;
+import pl.kondziet.springbackend.repository.jpa.GroupRepository;
 import pl.kondziet.springbackend.service.GroupService;
+import pl.kondziet.springbackend.util.mapper.GroupMapper;
 
 import java.util.List;
 
@@ -17,39 +17,21 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
-    private final UserGroupRepository userGroupRepository;
-
-    @Override
-    public Group save(Group group) {
-        return groupRepository.save(group);
-    }
+    private final GroupMapper groupMapper;
 
     @Override
     public List<Group> findAllUserGroups(User user) {
         return groupRepository.findAllUserGroupsByEmail(user);
     }
 
-    @Transactional
     @Override
-    public Group createNewGroup(Group group, User owner) {
+    public Group createGroup(GroupRequest groupRequest, User owner) {
+        Assert.notNull(owner, "Owner must not be null");
 
-        group.setOwner(owner);
-        Group savedGroup = save(group);
+        Group group = groupMapper.dtoToGroup(groupRequest);
+        Assert.notNull(group, "Group must not be null");
 
-        UserGroup userGroup = UserGroup.builder()
-                .id(UserGroup.UserGroupId.builder()
-                        .userId(owner.getId())
-                        .groupId(group.getId())
-                        .build()
-                )
-                .user(owner)
-                .group(group)
-                .build();
-
-        userGroupRepository.save(userGroup);
-
-        return savedGroup;
+        return groupRepository.saveGroupAndAssignOwner(group, owner);
     }
-
 
 }

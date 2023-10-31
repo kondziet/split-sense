@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.kondziet.springbackend.model.dto.GroupRequest;
 import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.model.entity.UserGroup;
 import pl.kondziet.springbackend.service.GroupService;
 import pl.kondziet.springbackend.service.UserService;
 import pl.kondziet.springbackend.util.mapper.GroupMapper;
@@ -24,11 +23,11 @@ public class GroupController {
 
     @GetMapping
     ResponseEntity<?> getUserGroups(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName());
+        User authenticatedUser = userService.findByEmail(authentication.getName());
 
         return ResponseEntity.ok(
                 groupService
-                        .findAllUserGroups(user)
+                        .findAllUserGroups(authenticatedUser)
                         .stream()
                         .map(groupMapper::groupToDto)
                         .toList()
@@ -36,15 +35,14 @@ public class GroupController {
     }
 
     @PostMapping
-    ResponseEntity<?> createGroup(Authentication authentication, @RequestBody GroupRequest groupRequest) {
-        User owner = userService.findByEmail(authentication.getName());
-        Group group = groupMapper.dtoToGroup(groupRequest);
+    ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest, Authentication authentication) {
+        User authenticatedUser = userService.findByEmail(authentication.getName());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
                         groupMapper.groupToDto(
-                                groupService.createNewGroup(group, owner)
+                                groupService.createGroup(groupRequest, authenticatedUser)
                         )
                 );
     }

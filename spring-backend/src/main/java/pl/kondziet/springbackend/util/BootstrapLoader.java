@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import pl.kondziet.springbackend.model.dto.GroupRequest;
 import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
 import pl.kondziet.springbackend.model.entity.UserGroup;
@@ -31,25 +32,12 @@ public class BootstrapLoader implements CommandLineRunner {
                 .password(passwordEncoder.encode("beetroot"))
                 .build();
 
-        userService.save(user1);
-
-        Group group1 = Group.builder()
+        GroupRequest group1 = GroupRequest.builder()
                 .name("farm lovers")
                 .currency("USD")
                 .build();
 
-        groupService.save(group1);
-
-        UserGroup userGroup1 = UserGroup.builder()
-                .id(UserGroup.UserGroupId.builder()
-                        .userId(user1.getId())
-                        .groupId(group1.getId())
-                        .build())
-                .user(user1)
-                .group(group1)
-                .build();
-
-        userGroupService.save(userGroup1);
+        groupService.createGroup(group1, user1);
 
     }
 }
