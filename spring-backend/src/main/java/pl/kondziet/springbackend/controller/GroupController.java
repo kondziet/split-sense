@@ -25,13 +25,15 @@ public class GroupController {
     ResponseEntity<?> getUserGroups(Authentication authentication) {
         User authenticatedUser = userService.findByEmail(authentication.getName());
 
-        return ResponseEntity.ok(
-                groupService
-                        .findAllUserGroups(authenticatedUser)
-                        .stream()
-                        .map(groupMapper::groupToDto)
-                        .toList()
-        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        groupService
+                                .findAllUserGroups(authenticatedUser)
+                                .stream()
+                                .map(groupMapper::groupToDto)
+                                .toList()
+                );
     }
 
     @PostMapping
