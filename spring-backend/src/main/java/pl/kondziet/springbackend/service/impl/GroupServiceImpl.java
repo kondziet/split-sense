@@ -40,9 +40,9 @@ public class GroupServiceImpl implements GroupService {
         Assert.notNull(group, "Group must not be null");
 
         User mergedOwner = userRepository.save(owner);
-        Group savedGroup = groupRepository.save(group);
 
-        savedGroup.setOwner(mergedOwner);
+        group.setOwner(mergedOwner);
+        Group savedGroup = groupRepository.save(group);
 
         GroupMembership membership = GroupMembership.builder()
                 .id(new GroupMembership.UserGroupId(mergedOwner.getId(), savedGroup.getId()))
