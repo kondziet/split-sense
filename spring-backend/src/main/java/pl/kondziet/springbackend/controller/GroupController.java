@@ -28,11 +28,9 @@ public class GroupController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
-                        groupService
-                                .findAllUserGroups(authenticatedUser)
-                                .stream()
-                                .map(groupMapper::groupToDto)
-                                .toList()
+                        groupMapper.groupsToDtos(
+                                groupService.findAllUserGroups(authenticatedUser)
+                        )
                 );
     }
 
