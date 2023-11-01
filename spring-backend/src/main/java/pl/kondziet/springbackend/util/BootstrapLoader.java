@@ -6,20 +6,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.kondziet.springbackend.model.dto.GroupRequest;
-import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.model.entity.UserGroup;
 import pl.kondziet.springbackend.service.GroupService;
-import pl.kondziet.springbackend.service.UserGroupService;
 import pl.kondziet.springbackend.service.UserService;
 
 @AllArgsConstructor
 @Component
 public class BootstrapLoader implements CommandLineRunner {
 
-    private final UserService userService;
     private final GroupService groupService;
-    private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
