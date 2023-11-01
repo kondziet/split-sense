@@ -7,9 +7,9 @@ import org.springframework.util.Assert;
 import pl.kondziet.springbackend.model.dto.GroupRequest;
 import pl.kondziet.springbackend.model.entity.Group;
 import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.model.entity.UserGroup;
+import pl.kondziet.springbackend.model.entity.GroupMembership;
 import pl.kondziet.springbackend.repository.GroupRepository;
-import pl.kondziet.springbackend.repository.UserGroupRepository;
+import pl.kondziet.springbackend.repository.GroupMembershipRepository;
 import pl.kondziet.springbackend.repository.UserRepository;
 import pl.kondziet.springbackend.service.GroupService;
 import pl.kondziet.springbackend.util.mapper.GroupMapper;
@@ -21,13 +21,13 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
-    private final UserGroupRepository userGroupRepository;
+    private final GroupMembershipRepository groupMembershipRepository;
     private final UserRepository userRepository;
     private final GroupMapper groupMapper;
 
     @Override
     public List<Group> findAllUserGroups(User user) {
-        return groupRepository.findAllUserGroupsByEmail(user);
+        return groupMembershipRepository.findAllUserGroupsByEmail(user);
     }
 
     @Transactional
@@ -44,13 +44,13 @@ public class GroupServiceImpl implements GroupService {
 
         savedGroup.setOwner(mergedOwner);
 
-        UserGroup membership = UserGroup.builder()
-                .id(new UserGroup.UserGroupId(mergedOwner.getId(), savedGroup.getId()))
+        GroupMembership membership = GroupMembership.builder()
+                .id(new GroupMembership.UserGroupId(mergedOwner.getId(), savedGroup.getId()))
                 .user(mergedOwner)
                 .group(savedGroup)
                 .build();
 
-        userGroupRepository.save(membership);
+        groupMembershipRepository.save(membership);
 
         return savedGroup;
     }

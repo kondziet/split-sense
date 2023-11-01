@@ -27,7 +27,7 @@ public class Group implements Serializable {
     @OneToMany(mappedBy = "group")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<UserGroup> userGroups = new HashSet<>();
+    private Set<GroupMembership> groupMemberships = new HashSet<>();
     @OneToMany(mappedBy = "group")
     @Builder.Default
     @EqualsAndHashCode.Exclude

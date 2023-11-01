@@ -2,7 +2,6 @@ package pl.kondziet.springbackend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Persistent;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +25,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<UserGroup> userGroups = new HashSet<>();
+    private Set<GroupMembership> groupMemberships = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

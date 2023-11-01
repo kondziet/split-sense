@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "USER_GROUPS")
-public class UserGroup implements Serializable {
+public class GroupMembership implements Serializable {
 
     @Data
     @Embeddable
