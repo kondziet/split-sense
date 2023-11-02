@@ -2,6 +2,7 @@ package pl.kondziet.springbackend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -11,10 +12,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "EXPENSES")
-public class Expense implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "EXPENSE_TYPE")
+public abstract class Expense implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,8 +25,6 @@ public class Expense implements Serializable {
     private String name;
     @ManyToOne
     private User payer;
-    @ManyToOne
-    private Group group;
     @OneToMany(mappedBy = "expense")
     @Builder.Default
     @EqualsAndHashCode.Exclude
