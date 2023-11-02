@@ -34,7 +34,9 @@ public class ExpenseController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        expenseService.createGroupExpense(groupExpenseRequest, authenticatedUser, groupId).getGroup().getId()
+                        expenseMapper.groupExpenseToDto(
+                                expenseService.createGroupExpense(groupExpenseRequest, authenticatedUser, groupId)
+                        )
                 );
     }
 
