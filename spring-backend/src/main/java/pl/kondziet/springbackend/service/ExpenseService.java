@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface ExpenseService {
 
-    GroupExpense createGroupExpense(GroupExpenseRequest groupExpenseRequest, User payer, UUID groupId);
-    PersonalExpense createPersonalExpense(PersonalExpenseRequest personalExpenseRequest, User payer);
+    GroupExpense createGroupExpense(GroupExpenseRequest expenseDetails, User payer, UUID groupId);
+    PersonalExpense createPersonalExpense(PersonalExpenseRequest expenseDetails, User payer);
 }
