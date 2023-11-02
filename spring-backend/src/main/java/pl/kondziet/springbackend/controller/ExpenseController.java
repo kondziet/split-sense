@@ -1,13 +1,16 @@
 package pl.kondziet.springbackend.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.kondziet.springbackend.model.dto.ExpenseRequest;
+import pl.kondziet.springbackend.model.dto.GroupExpenseRequest;
+import pl.kondziet.springbackend.model.dto.PersonalExpenseRequest;
 import pl.kondziet.springbackend.model.entity.User;
 import pl.kondziet.springbackend.service.ExpenseService;
 import pl.kondziet.springbackend.service.UserService;
+import pl.kondziet.springbackend.util.mapper.ExpenseMapper;
 
 import java.util.UUID;
 
@@ -18,15 +21,36 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final UserService userService;
+    private final ExpenseMapper expenseMapper;
 
-    @GetMapping("/group/{groupId}")
-    ResponseEntity<?> getGroupExpenses(
+    @PostMapping("/group/{groupId}")
+    ResponseEntity<?> createGroupExpense(
             @PathVariable("groupId") UUID groupId,
-            @RequestBody ExpenseRequest expenseRequest,
+            @RequestBody GroupExpenseRequest groupExpenseRequest,
             Authentication authentication
     ) {
         User authenticatedUser = userService.findByEmail(authentication.getName());
 
-        return ResponseEntity.ok(groupId.toString());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        expenseService.createGroupExpense(groupExpenseRequest, authenticatedUser, groupId).getGroup().getId()
+                );
+    }
+
+    @PostMapping("/personal")
+    ResponseEntity<?> createPersonalExpense(
+            @RequestBody PersonalExpenseRequest personalExpenseRequest,
+            Authentication authentication
+    ) {
+        User authenticatedUser = userService.findByEmail(authentication.getName());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        expenseMapper.personalExpenseToDto(
+                                expenseService.createPersonalExpense(personalExpenseRequest, authenticatedUser)
+                        )
+                );
     }
 }
