@@ -31,6 +31,6 @@ public class Group implements Serializable {
     @OneToMany(mappedBy = "group")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<Expense> expenses = new HashSet<>();
+    private Set<GroupExpense> groupExpenses = new HashSet<>();
 
 }
