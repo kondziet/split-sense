@@ -26,7 +26,7 @@ public class ExpenseController {
     @PostMapping("/group/{groupId}")
     ResponseEntity<?> createGroupExpense(
             @PathVariable("groupId") UUID groupId,
-            @RequestBody GroupExpenseRequest groupExpenseRequest,
+            @RequestBody GroupExpenseRequest expenseDetails,
             Authentication authentication
     ) {
         User authenticatedUser = userService.findByEmail(authentication.getName());
@@ -35,14 +35,14 @@ public class ExpenseController {
                 .status(HttpStatus.CREATED)
                 .body(
                         expenseMapper.groupExpenseToDto(
-                                expenseService.createGroupExpense(groupExpenseRequest, authenticatedUser, groupId)
+                                expenseService.createGroupExpense(expenseDetails, authenticatedUser, groupId)
                         )
                 );
     }
 
     @PostMapping("/personal")
     ResponseEntity<?> createPersonalExpense(
-            @RequestBody PersonalExpenseRequest personalExpenseRequest,
+            @RequestBody PersonalExpenseRequest expenseDetails,
             Authentication authentication
     ) {
         User authenticatedUser = userService.findByEmail(authentication.getName());
@@ -51,7 +51,7 @@ public class ExpenseController {
                 .status(HttpStatus.CREATED)
                 .body(
                         expenseMapper.personalExpenseToDto(
-                                expenseService.createPersonalExpense(personalExpenseRequest, authenticatedUser)
+                                expenseService.createPersonalExpense(expenseDetails, authenticatedUser)
                         )
                 );
     }
