@@ -2,10 +2,10 @@ package pl.kondziet.springbackend.util.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import pl.kondziet.springbackend.model.dto.ExpenseDebtorResponse;
+import pl.kondziet.springbackend.model.dto.DebtResponse;
 import pl.kondziet.springbackend.model.dto.GroupExpenseResponse;
 import pl.kondziet.springbackend.model.dto.PersonalExpenseResponse;
-import pl.kondziet.springbackend.model.entity.ExpenseDebtor;
+import pl.kondziet.springbackend.model.entity.Debt;
 import pl.kondziet.springbackend.model.entity.GroupExpense;
 import pl.kondziet.springbackend.model.entity.PersonalExpense;
 
@@ -16,16 +16,14 @@ import java.util.Set;
 public interface ExpenseMapper {
 
     @Mapping(target = "debtorId", source = "debtor.id")
-    ExpenseDebtorResponse expenseDebtorToDto(ExpenseDebtor expenseDebtor);
+    DebtResponse debtToDto(Debt debt);
 
-    List<ExpenseDebtorResponse> expenseDebtorsToDtos(Set<ExpenseDebtor> expenseDebtors);
+    List<DebtResponse> debtsToDtos(Set<Debt> debts);
 
     @Mapping(target = "payerId", source = "payer.id")
-    @Mapping(target = "debts", source = "expenseDebtors")
     PersonalExpenseResponse personalExpenseToDto(PersonalExpense personalExpense);
 
     @Mapping(target = "payerId", source = "payer.id")
-    @Mapping(target = "debts", source = "expenseDebtors")
     GroupExpenseResponse groupExpenseToDto(GroupExpense groupExpense);
 
 }

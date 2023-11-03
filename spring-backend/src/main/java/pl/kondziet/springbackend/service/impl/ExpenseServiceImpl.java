@@ -3,11 +3,11 @@ package pl.kondziet.springbackend.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.model.dto.ExpenseDebtorRequest;
+import pl.kondziet.springbackend.model.dto.DebtRequest;
 import pl.kondziet.springbackend.model.dto.GroupExpenseRequest;
 import pl.kondziet.springbackend.model.dto.PersonalExpenseRequest;
 import pl.kondziet.springbackend.model.entity.*;
-import pl.kondziet.springbackend.repository.ExpenseDebtorRepository;
+import pl.kondziet.springbackend.repository.DebtRepository;
 import pl.kondziet.springbackend.repository.ExpenseRepository;
 import pl.kondziet.springbackend.repository.GroupRepository;
 import pl.kondziet.springbackend.repository.UserRepository;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final ExpenseDebtorRepository expenseDebtorRepository;
+    private final DebtRepository debtRepository;
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     private final ExpenseMapper expenseMapper;
@@ -43,9 +43,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         GroupExpense savedExpense = expenseRepository.save(expense);
 
-        List<ExpenseDebtor> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
+        List<Debt> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
 
-        savedExpense.getExpenseDebtors().addAll(savedDebts);
+        savedExpense.getDebts().addAll(savedDebts);
 
         return savedExpense;
     }
@@ -63,23 +63,23 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         PersonalExpense savedExpense = expenseRepository.save(expense);
 
-        List<ExpenseDebtor> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
+        List<Debt> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
 
-        savedExpense.getExpenseDebtors().addAll(savedDebts);
+        savedExpense.getDebts().addAll(savedDebts);
 
         return savedExpense;
     }
 
     @Transactional
-    private List<ExpenseDebtor> saveDebtsToExpense(Expense targetExpense, List<ExpenseDebtorRequest> debts) {
-        List<ExpenseDebtor> expenseDebts = debts.stream()
+    private List<Debt> saveDebtsToExpense(Expense targetExpense, List<DebtRequest> debts) {
+        List<Debt> expenseDebts = debts.stream()
                 .map(debtor -> {
                     User user = userRepository.findById(debtor.debtorId()).orElseThrow();
                     String currency = debtor.currency();
                     BigDecimal amount = debtor.amount();
 
-                    return ExpenseDebtor.builder()
-                            .id(new ExpenseDebtor.ExpenseDebtorId(targetExpense.getId(), user.getId()))
+                    return Debt.builder()
+                            .id(new Debt.ExpenseDebtorId(targetExpense.getId(), user.getId()))
                             .debtor(user)
                             .expense(targetExpense)
                             .currency(currency)
@@ -88,6 +88,6 @@ public class ExpenseServiceImpl implements ExpenseService {
                 })
                 .toList();
 
-        return expenseDebtorRepository.saveAll(expenseDebts);
+        return debtRepository.saveAll(expenseDebts);
     }
 }

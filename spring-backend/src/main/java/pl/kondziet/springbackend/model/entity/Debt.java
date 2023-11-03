@@ -15,8 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "EXPENSE_DEBTORS")
-public class ExpenseDebtor implements Serializable {
+@Table(name = "DEBTS")
+public class Debt implements Serializable {
 
     @Data
     @Embeddable

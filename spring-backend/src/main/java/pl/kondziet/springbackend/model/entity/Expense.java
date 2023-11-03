@@ -28,6 +28,6 @@ public abstract class Expense implements Serializable {
     @OneToMany(mappedBy = "expense")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<ExpenseDebtor> expenseDebtors = new HashSet<>();
+    private Set<Debt> debts = new HashSet<>();
 
 }

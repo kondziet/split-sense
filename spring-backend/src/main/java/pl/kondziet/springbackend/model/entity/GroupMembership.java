@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "USER_GROUPS")
+@Table(name = "GROUP_MEMBERSHIPS")
 public class GroupMembership implements Serializable {
 
     @Data
