@@ -72,7 +72,6 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Transactional
     private List<Debt> saveDebtsToExpense(Expense targetExpense, List<DebtRequest> debts) {
-        Expense mergedExpense = expenseRepository.save(targetExpense);
 
         List<Debt> expenseDebts = debts.stream()
                 .map(debtor -> {
@@ -81,9 +80,9 @@ public class ExpenseServiceImpl implements ExpenseService {
                     BigDecimal amount = debtor.amount();
 
                     return Debt.builder()
-                            .id(new Debt.ExpenseDebtorId(mergedExpense.getId(), user.getId()))
+                            .id(new Debt.ExpenseDebtorId(targetExpense.getId(), user.getId()))
                             .debtor(user)
-                            .expense(mergedExpense)
+                            .expense(targetExpense)
                             .currency(currency)
                             .amount(amount)
                             .build();
