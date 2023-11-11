@@ -5,5 +5,5 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.ExpenseJpaEntity
 
 import java.util.UUID;
 
-public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
+public interface ExpenseRepository extends JpaRepository<ExpenseJpaEntity, UUID> {
 }

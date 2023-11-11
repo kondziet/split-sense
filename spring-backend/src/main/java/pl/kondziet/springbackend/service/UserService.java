@@ -4,7 +4,7 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 
 public interface UserService {
 
-    User save(User user);
-    User findByEmail(String email);
-    void updateEmail(User user, String email);
+    UserJpaEntity save(UserJpaEntity userJpaEntity);
+    UserJpaEntity findByEmail(String email);
+    void updateEmail(UserJpaEntity userJpaEntity, String email);
 }

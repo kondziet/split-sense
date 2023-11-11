@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import pl.kondziet.springbackend.infrastructure.security.token.TokenVerifyFilter;
 
-import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor

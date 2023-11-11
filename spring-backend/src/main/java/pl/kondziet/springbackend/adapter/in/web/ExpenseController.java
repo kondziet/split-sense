@@ -11,7 +11,6 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.application.port.in.CreateGroupExpenseUseCase;
 import pl.kondziet.springbackend.service.ExpenseService;
 import pl.kondziet.springbackend.service.UserService;
-import pl.kondziet.springbackend.util.mapper.ExpenseMapper;
 
 import java.util.UUID;
 
@@ -20,9 +19,8 @@ import java.util.UUID;
 @RequestMapping("/api/expense")
 public class ExpenseController {
 
-    private final ExpenseService expenseService;
     private final UserService userService;
-    private final ExpenseMapper expenseMapper;
+    private final CreateGroupExpenseUseCase createGroupExpenseUseCase;
 
     @PostMapping("/group/{groupId}")
     ResponseEntity<?> createGroupExpense(
@@ -30,15 +28,11 @@ public class ExpenseController {
             @RequestBody GroupExpenseRequest expenseDetails,
             Authentication authentication
     ) {
-        User authenticatedUser = userService.findByEmail(authentication.getName());
+        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        expenseMapper.groupExpenseToDto(
-                                expenseService.createGroupExpense(expenseDetails, authenticatedUser, groupId)
-                        )
-                );
+                .build();
     }
 
     @PostMapping("/personal")
@@ -46,14 +40,10 @@ public class ExpenseController {
             @RequestBody PersonalExpenseRequest expenseDetails,
             Authentication authentication
     ) {
-        User authenticatedUser = userService.findByEmail(authentication.getName());
+        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        expenseMapper.personalExpenseToDto(
-                                expenseService.createPersonalExpense(expenseDetails, authenticatedUser)
-                        )
-                );
+                .build();
     }
 }

@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.util;
+package pl.kondziet.springbackend.infrastructure;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
 @Component
 public class BootstrapLoader implements CommandLineRunner {
 
-    private final GroupService groupService;
+    private final CreateGroupUseCase createGroupUseCase;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -23,25 +23,27 @@ public class BootstrapLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User user1 = User.builder()
+        UserJpaEntity userJpaEntity1 = UserJpaEntity.builder()
                 .username("dwight")
                 .email("dwight@gmail.com")
                 .password(passwordEncoder.encode("beetroot"))
                 .build();
-        User user2 = User.builder()
+        UserJpaEntity userJpaEntity2 = UserJpaEntity.builder()
                 .username("kelly")
                 .email("kelly@gmail.com")
                 .password(passwordEncoder.encode("cookies"))
                 .build();
 
-        userRepository.save(user2);
+        UserJpaEntity savedUser1 = userRepository.save(userJpaEntity1);
+        UserJpaEntity savedUser2 = userRepository.save(userJpaEntity2);
 
-        GroupRequest group1 = GroupRequest.builder()
-                .name("farm lovers")
-                .currency("USD")
+        CreateGroupCommand command = CreateGroupCommand.builder()
+                .groupName("farm lovers")
+                .groupCurrency("USD")
+                .groupOwnerId(new UserId(savedUser1.getId()))
                 .build();
 
-        groupService.createGroup(group1, user1);
+        createGroupUseCase.createGroup(command);
 
     }
 }

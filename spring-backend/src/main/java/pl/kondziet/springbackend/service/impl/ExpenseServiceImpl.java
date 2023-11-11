@@ -10,83 +10,54 @@ import pl.kondziet.springbackend.adapter.out.persistence.repository.ExpenseRepos
 import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupRepository;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.UserRepository;
 import pl.kondziet.springbackend.service.ExpenseService;
-import pl.kondziet.springbackend.util.mapper.ExpenseMapper;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final DebtRepository debtRepository;
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-    private final ExpenseMapper expenseMapper;
+//    private final ExpenseMapper expenseMapper;
 
     @Transactional
     @Override
-    public GroupExpense createGroupExpense(GroupExpenseRequest expenseDetails, User payer, UUID groupId) {
+    public PersonalExpenseJpaEntity createPersonalExpense(PersonalExpenseRequest expenseDetails, UserJpaEntity payer) {
 
-        User mergedUser = userRepository.save(payer);
-        Group group = groupRepository.findById(groupId).orElseThrow();
+        UserJpaEntity mergedUserJpaEntity = userRepository.save(payer);
 
-        GroupExpense expense = GroupExpense.builder()
+        PersonalExpenseJpaEntity expense = PersonalExpenseJpaEntity.builder()
                 .name(expenseDetails.name())
-                .payer(mergedUser)
-                .group(group)
+                .payer(mergedUserJpaEntity)
                 .build();
 
-        GroupExpense savedExpense = expenseRepository.save(expense);
+        PersonalExpenseJpaEntity savedExpense = expenseRepository.save(expense);
 
-        List<Debt> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
+        List<DebtJpaEntity> savedDebtJpaEntities = saveDebtsToExpense(expenseDetails.debts());
 
-        savedExpense.getDebts().addAll(savedDebts);
+        savedExpense.getDebtJpaEntities().addAll(savedDebtJpaEntities);
 
         return savedExpense;
     }
 
     @Transactional
-    @Override
-    public PersonalExpense createPersonalExpense(PersonalExpenseRequest expenseDetails, User payer) {
+    private List<DebtJpaEntity> saveDebtsToExpense(List<DebtRequest> debts) {
 
-        User mergedUser = userRepository.save(payer);
-
-        PersonalExpense expense = PersonalExpense.builder()
-                .name(expenseDetails.name())
-                .payer(mergedUser)
-                .build();
-
-        PersonalExpense savedExpense = expenseRepository.save(expense);
-
-        List<Debt> savedDebts = saveDebtsToExpense(savedExpense, expenseDetails.debts());
-
-        savedExpense.getDebts().addAll(savedDebts);
-
-        return savedExpense;
-    }
-
-    @Transactional
-    private List<Debt> saveDebtsToExpense(Expense targetExpense, List<DebtRequest> debts) {
-
-        List<Debt> expenseDebts = debts.stream()
+        return debts.stream()
                 .map(debtor -> {
-                    User user = userRepository.findById(debtor.debtorId()).orElseThrow();
+                    UserJpaEntity userJpaEntity = userRepository.findById(debtor.debtorId()).orElseThrow();
                     String currency = debtor.currency();
                     BigDecimal amount = debtor.amount();
 
-                    return Debt.builder()
-                            .id(new Debt.ExpenseDebtorId(targetExpense.getId(), user.getId()))
-                            .debtor(user)
-                            .expense(targetExpense)
+                    return DebtJpaEntity.builder()
+                            .debtor(userJpaEntity)
                             .currency(currency)
                             .amount(amount)
                             .build();
                 })
                 .toList();
-
-        return debtRepository.saveAll(expenseDebts);
     }
 }

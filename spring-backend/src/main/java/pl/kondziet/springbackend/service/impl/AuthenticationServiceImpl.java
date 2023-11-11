@@ -26,13 +26,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public SignUpResponse register(SignUpRequest registerRequest) {
-        User user = User.builder()
+        UserJpaEntity userJpaEntity = UserJpaEntity.builder()
                 .username(registerRequest.username())
                 .email(registerRequest.email())
                 .password(passwordEncoder.encode(registerRequest.password()))
                 .build();
 
-        userService.save(user);
+        userService.save(userJpaEntity);
         return SignUpResponse.builder()
                 .message("success")
                 .build();
@@ -46,9 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        User user = userService.findByEmail(signInRequest.email());
-        String generatedAccessToken = tokenService.generateAccessToken(user);
-        String generatedRefreshToken = tokenService.generateRefreshToken(user);
+        UserJpaEntity userJpaEntity = userService.findByEmail(signInRequest.email());
+        String generatedAccessToken = tokenService.generateAccessToken(userJpaEntity);
+        String generatedRefreshToken = tokenService.generateRefreshToken(userJpaEntity);
 
         return SignInResponse.builder()
                 .accessToken(generatedAccessToken)

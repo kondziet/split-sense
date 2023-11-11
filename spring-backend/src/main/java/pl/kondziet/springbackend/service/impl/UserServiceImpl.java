@@ -15,19 +15,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public UserJpaEntity save(UserJpaEntity userJpaEntity) {
+        return userRepository.save(userJpaEntity);
     }
 
     @Cacheable(value = "users", key = "#email")
     @Override
-    public User findByEmail(String email) {
+    public UserJpaEntity findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
     @CacheEvict(value = "users", key = "#email")
     @Override
-    public void updateEmail(User user, String email) {
-        user.setEmail(email);
+    public void updateEmail(UserJpaEntity userJpaEntity, String email) {
+        userJpaEntity.setEmail(email);
     }
 }
