@@ -14,41 +14,48 @@ import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
 import pl.kondziet.springbackend.application.port.out.LoadUserGroupsPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 import pl.kondziet.springbackend.service.UserService;
-import pl.kondziet.springbackend.util.mapper.GroupMapper;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/group")
 public class GroupController {
 
-    private final GroupService groupService;
     private final UserService userService;
+    private final CreateGroupUseCase createGroupUseCase;
+    private final LoadUserGroupsPort loadUserGroupsPort;
     private final GroupMapper groupMapper;
+
 
     @GetMapping
     ResponseEntity<?> getUserGroups(Authentication authentication) {
-        User authenticatedUser = userService.findByEmail(authentication.getName());
+        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
+
+        Set<Group> groups = loadUserGroupsPort.loadGroups(
+                new UserId(authenticatedUserJpaEntity.getId())
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(
-                        groupMapper.groupsToDtos(
-                                groupService.findAllUserGroups(authenticatedUser)
-                        )
-                );
+                .body(groupMapper.groupsToGroupResponses(groups));
     }
 
     @PostMapping
     ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest, Authentication authentication) {
-        User authenticatedUser = userService.findByEmail(authentication.getName());
+        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
+
+        CreateGroupCommand command = CreateGroupCommand.builder()
+                .groupName(groupRequest.name())
+                .groupCurrency(groupRequest.currency())
+                .groupOwnerId(new UserId(authenticatedUserJpaEntity.getId()))
+                .build();
+
+        createGroupUseCase.createGroup(command);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        groupMapper.groupToDto(
-                                groupService.createGroup(groupRequest, authenticatedUser)
-                        )
-                );
+                .build();
     }
 
 }
