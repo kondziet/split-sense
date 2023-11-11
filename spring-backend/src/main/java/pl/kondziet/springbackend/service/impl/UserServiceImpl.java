@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.repository.UserRepository;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
+import pl.kondziet.springbackend.adapter.out.persistence.repository.UserRepository;
 import pl.kondziet.springbackend.service.UserService;
 
 @AllArgsConstructor

@@ -1,7 +1,7 @@
 package pl.kondziet.springbackend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import pl.kondziet.springbackend.model.dto.*;
+import pl.kondziet.springbackend.adapter.in.web.dto.*;
 
 public interface AuthenticationService {
     public SignUpResponse register(SignUpRequest registerRequest);

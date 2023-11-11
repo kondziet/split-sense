@@ -1,10 +1,10 @@
 package pl.kondziet.springbackend.service;
 
-import pl.kondziet.springbackend.model.dto.GroupExpenseRequest;
-import pl.kondziet.springbackend.model.dto.PersonalExpenseRequest;
-import pl.kondziet.springbackend.model.entity.GroupExpense;
-import pl.kondziet.springbackend.model.entity.PersonalExpense;
-import pl.kondziet.springbackend.model.entity.User;
+import pl.kondziet.springbackend.adapter.in.web.dto.GroupExpenseRequest;
+import pl.kondziet.springbackend.adapter.in.web.dto.PersonalExpenseRequest;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupExpenseJpaEntity;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.PersonalExpenseJpaEntity;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 
 import java.util.UUID;
 

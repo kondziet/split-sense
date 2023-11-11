@@ -8,10 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.model.dto.*;
-import pl.kondziet.springbackend.model.entity.User;
-import pl.kondziet.springbackend.security.token.JwtService;
-import pl.kondziet.springbackend.security.token.TokenService;
+import pl.kondziet.springbackend.adapter.in.web.dto.*;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
+import pl.kondziet.springbackend.infrastructure.security.token.JwtService;
+import pl.kondziet.springbackend.infrastructure.security.token.TokenService;
 import pl.kondziet.springbackend.service.AuthenticationService;
 import pl.kondziet.springbackend.service.UserService;
 
