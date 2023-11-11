@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "GROUP_MEMBERSHIPS")
-public class GroupMembership implements Serializable {
+public class GroupMembershipJpaEntity implements Serializable {
 
     @Data
     @Embeddable
@@ -31,9 +31,11 @@ public class GroupMembership implements Serializable {
     private UserGroupId id;
     @ManyToOne
     @MapsId(value = "userId")
-    private User user;
+    @JoinColumn(name = "USER_ID")
+    private UserJpaEntity userJpaEntity;
     @ManyToOne
     @MapsId(value = "groupId")
-    private Group group;
+    @JoinColumn(name = "GROUP_ID")
+    private GroupJpaEntity groupJpaEntity;
 
 }

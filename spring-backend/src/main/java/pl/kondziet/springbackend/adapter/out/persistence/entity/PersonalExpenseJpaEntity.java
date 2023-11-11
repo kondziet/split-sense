@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Entity
 @DiscriminatorValue("PERSONAL_EXPENSE")
-public class PersonalExpense extends Expense{
+public class PersonalExpenseJpaEntity extends ExpenseJpaEntity {
 
     private boolean paid;
 }

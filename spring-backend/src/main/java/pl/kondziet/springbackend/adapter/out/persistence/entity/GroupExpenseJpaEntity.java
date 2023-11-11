@@ -3,12 +3,8 @@ package pl.kondziet.springbackend.adapter.out.persistence.entity;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -17,9 +13,9 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @Entity
 @DiscriminatorValue("GROUP_EXPENSE")
-public class GroupExpense extends Expense{
+public class GroupExpenseJpaEntity extends ExpenseJpaEntity {
 
     @ManyToOne
-    private Group group;
+    private GroupJpaEntity groupJpaEntity;
 
 }

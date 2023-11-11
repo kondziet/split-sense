@@ -14,7 +14,7 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "USERS")
-public class User implements UserDetails {
+public class UserJpaEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,10 +22,15 @@ public class User implements UserDetails {
     private String username;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userJpaEntity")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<GroupMembership> groupMemberships = new HashSet<>();
+    private Set<GroupMembershipJpaEntity> groupMembershipJpaEntities = new HashSet<>();
+    @OneToMany
+    @JoinTable(name = "USER_EXPENSES")
+    @Builder.Default
+    @EqualsAndHashCode.Exclude
+    private Set<ExpenseJpaEntity> expenseJpaEntities = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "GROUPS")
-public class Group implements Serializable {
+public class GroupJpaEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,15 +22,15 @@ public class Group implements Serializable {
     private String name;
     private String currency;
     @ManyToOne
-    private User owner;
+    private UserJpaEntity owner;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "groupJpaEntity")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<GroupMembership> groupMemberships = new HashSet<>();
-    @OneToMany(mappedBy = "group")
+    private Set<GroupMembershipJpaEntity> groupMembershipJpaEntities = new HashSet<>();
+    @OneToMany(mappedBy = "groupJpaEntity")
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    private Set<GroupExpense> groupExpenses = new HashSet<>();
+    private Set<GroupExpenseJpaEntity> groupExpenses = new HashSet<>();
 
 }
