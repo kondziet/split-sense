@@ -1,7 +1,7 @@
-package pl.kondziet.springbackend.application.port.in;
+package pl.kondziet.springbackend.application.port.in.command;
 
 import lombok.Builder;
-import pl.kondziet.springbackend.application.domain.model.UserId;
+import pl.kondziet.springbackend.application.domain.model.id.UserId;
 
 @Builder
 public record CreateGroupCommand(String groupName, String groupCurrency, UserId groupOwnerId) {

@@ -1,10 +1,10 @@
-package pl.kondziet.springbackend.application.domain.model;
+package pl.kondziet.springbackend.application.domain.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.UUID;
+import pl.kondziet.springbackend.application.domain.model.id.GroupId;
+import pl.kondziet.springbackend.application.domain.model.id.UserId;
 
 @Data
 @AllArgsConstructor
