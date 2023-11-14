@@ -27,7 +27,11 @@ public class UserJpaEntity implements UserDetails {
     @EqualsAndHashCode.Exclude
     private Set<GroupMembershipJpaEntity> groupMembershipJpaEntities = new HashSet<>();
     @OneToMany
-    @JoinTable(name = "USER_EXPENSES")
+    @JoinTable(
+            name = "USER_EXPENSES",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "EXPENSE_ID")
+    )
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private Set<ExpenseJpaEntity> expenseJpaEntities = new HashSet<>();

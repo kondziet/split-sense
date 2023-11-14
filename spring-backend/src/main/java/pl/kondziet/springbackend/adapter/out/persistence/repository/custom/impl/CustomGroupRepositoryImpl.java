@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomGroupRepository;
-import pl.kondziet.springbackend.application.domain.model.Group;
+import pl.kondziet.springbackend.application.domain.model.entity.Group;
 
 @AllArgsConstructor
 @Repository

@@ -4,10 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.application.domain.model.entity.Debt;
-import pl.kondziet.springbackend.application.domain.model.entity.GroupExpense;
-import pl.kondziet.springbackend.application.port.in.command.CreateGroupExpenseCommand;
-import pl.kondziet.springbackend.application.port.in.CreateGroupExpenseUseCase;
-import pl.kondziet.springbackend.application.port.out.SaveGroupExpensePort;
+import pl.kondziet.springbackend.application.domain.model.entity.PersonalExpense;
+import pl.kondziet.springbackend.application.port.in.CreatePersonalExpenseUseCase;
+import pl.kondziet.springbackend.application.port.in.command.CreatePersonalExpenseCommand;
+import pl.kondziet.springbackend.application.port.out.SavePersonalExpensePort;
 import pl.kondziet.springbackend.infrastructure.mapper.DebtMapper;
 
 import java.util.Set;
@@ -15,24 +15,21 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
+public class CreatePersonalExpenseService implements CreatePersonalExpenseUseCase {
 
-    private final SaveGroupExpensePort saveGroupExpensePort;
+    private final SavePersonalExpensePort savePersonalExpensePort;
     private final DebtMapper debtMapper;
-
     @Override
-    public void createGroupExpense(CreateGroupExpenseCommand command) {
+    public void createPersonalExpense(CreatePersonalExpenseCommand command) {
 
         Set<Debt> expenseDebts = debtMapper.debtDetailsToDebts(command.expenseDebtDetails());
 
-        GroupExpense groupExpense = GroupExpense.builder()
+        PersonalExpense personalExpense = PersonalExpense.builder()
                 .name(command.expenseName())
                 .payerId(command.expensePayer())
                 .debts(expenseDebts)
-                .groupId(command.expenseGroupId())
                 .build();
 
-        saveGroupExpensePort.saveGroupExpense(groupExpense);
-
+        savePersonalExpensePort.savePersonalExpense(personalExpense);
     }
 }

@@ -9,7 +9,7 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomGroupMembershipRepository;
-import pl.kondziet.springbackend.application.domain.model.GroupMembership;
+import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
 
 @AllArgsConstructor
 @Repository
@@ -20,7 +20,7 @@ public class CustomGroupMembershipRepositoryImpl implements CustomGroupMembershi
     private EntityManager em;
 
     @Override
-    public GroupMembershipJpaEntity save(GroupMembership groupMembership) {
+    public void save(GroupMembership groupMembership) {
         GroupMembershipJpaEntity.UserGroupId groupMembershipId = new GroupMembershipJpaEntity.UserGroupId(
                 groupMembership.getUserId().id(), groupMembership.getGroupId().id()
         );
@@ -36,7 +36,5 @@ public class CustomGroupMembershipRepositoryImpl implements CustomGroupMembershi
                 .build();
 
         em.persist(groupMembershipJpaEntity);
-
-        return groupMembershipJpaEntity;
     }
 }

@@ -3,17 +3,15 @@ package pl.kondziet.springbackend.adapter.in.web;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.kondziet.springbackend.adapter.in.web.dto.GroupRequest;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.application.domain.model.Group;
-import pl.kondziet.springbackend.application.domain.model.UserId;
-import pl.kondziet.springbackend.application.port.in.CreateGroupCommand;
+import pl.kondziet.springbackend.application.domain.model.entity.Group;
+import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.application.port.in.AuthenticationPrincipalUseCase;
+import pl.kondziet.springbackend.application.port.in.command.CreateGroupCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
 import pl.kondziet.springbackend.application.port.out.LoadUserGroupsPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
-import pl.kondziet.springbackend.service.UserService;
 
 import java.util.Set;
 
@@ -22,19 +20,17 @@ import java.util.Set;
 @RequestMapping("/api/group")
 public class GroupController {
 
-    private final UserService userService;
+    private final AuthenticationPrincipalUseCase authenticationPrincipalUseCase;
     private final CreateGroupUseCase createGroupUseCase;
     private final LoadUserGroupsPort loadUserGroupsPort;
     private final GroupMapper groupMapper;
 
 
     @GetMapping
-    ResponseEntity<?> getUserGroups(Authentication authentication) {
-        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
+    ResponseEntity<?> getUserGroups() {
+        UserId authenticatedUserId = authenticationPrincipalUseCase.getAuthenticatedUserId();
 
-        Set<Group> groups = loadUserGroupsPort.loadGroups(
-                new UserId(authenticatedUserJpaEntity.getId())
-        );
+        Set<Group> groups = loadUserGroupsPort.loadGroups(authenticatedUserId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -42,13 +38,13 @@ public class GroupController {
     }
 
     @PostMapping
-    ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest, Authentication authentication) {
-        UserJpaEntity authenticatedUserJpaEntity = userService.findByEmail(authentication.getName());
+    ResponseEntity<?> createGroup(@RequestBody GroupRequest groupRequest) {
+        UserId authenticatedUserId = authenticationPrincipalUseCase.getAuthenticatedUserId();
 
         CreateGroupCommand command = CreateGroupCommand.builder()
                 .groupName(groupRequest.name())
                 .groupCurrency(groupRequest.currency())
-                .groupOwnerId(new UserId(authenticatedUserJpaEntity.getId()))
+                .groupOwnerId(authenticatedUserId)
                 .build();
 
         createGroupUseCase.createGroup(command);

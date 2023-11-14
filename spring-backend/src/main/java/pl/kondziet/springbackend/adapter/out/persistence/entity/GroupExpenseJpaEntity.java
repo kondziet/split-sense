@@ -2,6 +2,7 @@ package pl.kondziet.springbackend.adapter.out.persistence.entity;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class GroupExpenseJpaEntity extends ExpenseJpaEntity {
 
     @ManyToOne
+    @JoinColumn(name = "group_id")
     private GroupJpaEntity groupJpaEntity;
 
 }

@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomGroupMembershipRepository;
-import pl.kondziet.springbackend.application.domain.model.UserId;
 
 import java.util.Set;
 import java.util.UUID;

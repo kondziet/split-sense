@@ -27,6 +27,10 @@ public abstract class ExpenseJpaEntity implements Serializable {
     private UserJpaEntity payer;
 
     @ElementCollection
+    @CollectionTable(
+            name = "EXPENSE_DEBTS",
+            joinColumns=@JoinColumn(name = "expense_id", referencedColumnName = "id")
+    )
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private Set<DebtJpaEntity> debtJpaEntities = new HashSet<>();

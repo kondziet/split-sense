@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.UserRepository;
-import pl.kondziet.springbackend.application.domain.model.UserId;
-import pl.kondziet.springbackend.application.port.in.CreateGroupCommand;
+import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.application.port.in.command.CreateGroupCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
 
 @AllArgsConstructor
