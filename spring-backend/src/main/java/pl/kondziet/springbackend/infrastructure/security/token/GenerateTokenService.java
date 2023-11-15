@@ -1,20 +1,17 @@
-package pl.kondziet.springbackend.application.domain.service;
+package pl.kondziet.springbackend.infrastructure.security.token;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.application.port.in.TokenUseCase;
+import pl.kondziet.springbackend.application.port.in.GenerateTokenUseCase;
 import pl.kondziet.springbackend.application.port.out.SaveTokenPort;
-import pl.kondziet.springbackend.infrastructure.security.token.JwtFacade;
-import pl.kondziet.springbackend.infrastructure.security.token.Token;
-import pl.kondziet.springbackend.infrastructure.security.token.TokenType;
 
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class TokenService implements TokenUseCase {
+public class GenerateTokenService implements GenerateTokenUseCase {
 
     @Value("${jwt.access-token.expiration}")
     private long accessTokenExpiration;
