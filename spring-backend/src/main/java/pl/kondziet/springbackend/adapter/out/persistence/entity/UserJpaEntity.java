@@ -14,7 +14,7 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "USERS")
-public class UserJpaEntity implements UserDetails {
+public class UserJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,41 +35,4 @@ public class UserJpaEntity implements UserDetails {
     @Builder.Default
     @EqualsAndHashCode.Exclude
     private Set<ExpenseJpaEntity> expenseJpaEntities = new HashSet<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(
-                new SimpleGrantedAuthority("REGULAR_USER")
-        );
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
