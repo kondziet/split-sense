@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.application.domain.service;
+package pl.kondziet.springbackend.infrastructure.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -6,25 +6,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.application.port.in.AuthenticateUseCase;
-import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
-import pl.kondziet.springbackend.application.port.in.TokenUseCase;
+import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
+import pl.kondziet.springbackend.application.port.in.GenerateTokenUseCase;
 import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand;
 import pl.kondziet.springbackend.application.port.in.command.AuthenticationOutcome;
 import pl.kondziet.springbackend.application.port.in.command.RefreshAuthenticationOutcome;
-import pl.kondziet.springbackend.application.port.out.LoadUserDetailsPort;
 import pl.kondziet.springbackend.infrastructure.security.token.JwtFacade;
 
 @RequiredArgsConstructor
 @Service
-public class AuthenticationService implements AuthenticateUseCase, RefreshAuthenticationUseCase {
+public class AuthenticationService implements AuthenticationUseCase {
 
-    private final PasswordEncoder passwordEncoder;
-    private final LoadUserDetailsPort loadUserDetailsPort;
+    private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
-    private final TokenUseCase tokenUseCase;
+    private final GenerateTokenUseCase generateTokenUseCase;
     private final JwtFacade jwtFacade;
 
     @Override
@@ -36,9 +33,9 @@ public class AuthenticationService implements AuthenticateUseCase, RefreshAuthen
                 )
         );
 
-        UserDetails userDetails = loadUserDetailsPort.loadUserDetails(command.email());
-        String generatedAccessToken = tokenUseCase.generateAccessToken(userDetails);
-        String generatedRefreshToken = tokenUseCase.generateRefreshToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(command.email());
+        String generatedAccessToken = generateTokenUseCase.generateAccessToken(userDetails);
+        String generatedRefreshToken = generateTokenUseCase.generateRefreshToken(userDetails);
 
         return AuthenticationOutcome.builder()
                 .accessToken(generatedAccessToken)
@@ -56,9 +53,9 @@ public class AuthenticationService implements AuthenticateUseCase, RefreshAuthen
         String userEmail = jwtFacade.extractUserEmail(refreshToken);
 
         if (userEmail != null) {
-            UserDetails userDetails = loadUserDetailsPort.loadUserDetails(userEmail);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtFacade.isTokenValid(refreshToken, userDetails)) {
-                String accessToken = tokenUseCase.generateAccessToken(userDetails);
+                String accessToken = generateTokenUseCase.generateAccessToken(userDetails);
                 return RefreshAuthenticationOutcome.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)

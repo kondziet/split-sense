@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.kondziet.springbackend.adapter.in.web.dto.SignInRequest;
-import pl.kondziet.springbackend.application.port.in.AuthenticateUseCase;
-import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
+import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
 import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand;
 
 @AllArgsConstructor
@@ -14,8 +13,7 @@ import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand
 @RequestMapping("/api/authentication")
 public class AuthenticationController {
 
-    private final AuthenticateUseCase authenticateUseCase;
-    private final RefreshAuthenticationUseCase refreshAuthenticationUseCase;
+    private final AuthenticationUseCase authenticationUseCase;
 
     @PostMapping("/sign-in")
     ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
@@ -24,10 +22,10 @@ public class AuthenticationController {
                 .password(signInRequest.password())
                 .build();
 
-        return ResponseEntity.ok(authenticateUseCase.authenticate(command));
+        return ResponseEntity.ok(authenticationUseCase.authenticate(command));
     }
     @PostMapping("/refresh-token")
     ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        return ResponseEntity.ok(refreshAuthenticationUseCase.refreshAuthentication(request));
+        return ResponseEntity.ok(authenticationUseCase.refreshAuthentication(request));
     }
 }
