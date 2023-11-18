@@ -8,43 +8,44 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import pl.kondziet.springbackend.adapter.in.web.dto.SignInRequest;
+import pl.kondziet.springbackend.adapter.in.web.dto.SignInResponse;
+import pl.kondziet.springbackend.adapter.in.web.dto.TokenRefreshResponse;
 import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
-import pl.kondziet.springbackend.application.port.in.GenerateTokenUseCase;
-import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand;
-import pl.kondziet.springbackend.application.port.in.command.AuthenticationOutcome;
-import pl.kondziet.springbackend.application.port.in.command.RefreshAuthenticationOutcome;
+import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
+import pl.kondziet.springbackend.infrastructure.security.token.GenerateTokenService;
 import pl.kondziet.springbackend.infrastructure.security.token.JwtFacade;
 
 @RequiredArgsConstructor
 @Service
-public class AuthenticationService implements AuthenticationUseCase {
+public class AuthenticationService implements AuthenticationUseCase, RefreshAuthenticationUseCase {
 
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
-    private final GenerateTokenUseCase generateTokenUseCase;
+    private final GenerateTokenService generateTokenService;
     private final JwtFacade jwtFacade;
 
     @Override
-    public AuthenticationOutcome authenticate(AuthenticateCommand command) {
+    public SignInResponse authenticate(SignInRequest signInRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        command.email(),
-                        command.password()
+                        signInRequest.email(),
+                        signInRequest.password()
                 )
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(command.email());
-        String generatedAccessToken = generateTokenUseCase.generateAccessToken(userDetails);
-        String generatedRefreshToken = generateTokenUseCase.generateRefreshToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(signInRequest.email());
+        String generatedAccessToken = generateTokenService.generateAccessToken(userDetails);
+        String generatedRefreshToken = generateTokenService.generateRefreshToken(userDetails);
 
-        return AuthenticationOutcome.builder()
+        return SignInResponse.builder()
                 .accessToken(generatedAccessToken)
                 .refreshToken(generatedRefreshToken)
                 .build();
     }
 
     @Override
-    public RefreshAuthenticationOutcome refreshAuthentication(HttpServletRequest request) {
+    public TokenRefreshResponse refreshAuthentication(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid Authorization Header");
@@ -55,8 +56,8 @@ public class AuthenticationService implements AuthenticationUseCase {
         if (userEmail != null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtFacade.isTokenValid(refreshToken, userDetails)) {
-                String accessToken = generateTokenUseCase.generateAccessToken(userDetails);
-                return RefreshAuthenticationOutcome.builder()
+                String accessToken = generateTokenService.generateAccessToken(userDetails);
+                return TokenRefreshResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();

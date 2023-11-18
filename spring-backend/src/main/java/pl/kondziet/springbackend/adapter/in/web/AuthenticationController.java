@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.kondziet.springbackend.adapter.in.web.dto.SignInRequest;
 import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
-import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand;
+import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
 
 @AllArgsConstructor
 @RestController
@@ -14,18 +14,14 @@ import pl.kondziet.springbackend.application.port.in.command.AuthenticateCommand
 public class AuthenticationController {
 
     private final AuthenticationUseCase authenticationUseCase;
+    private final RefreshAuthenticationUseCase refreshAuthenticationUseCase;
 
     @PostMapping("/sign-in")
     ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
-        AuthenticateCommand command = AuthenticateCommand.builder()
-                .email(signInRequest.email())
-                .password(signInRequest.password())
-                .build();
-
-        return ResponseEntity.ok(authenticationUseCase.authenticate(command));
+        return ResponseEntity.ok(authenticationUseCase.authenticate(signInRequest));
     }
     @PostMapping("/refresh-token")
-    ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        return ResponseEntity.ok(authenticationUseCase.refreshAuthentication(request));
+    ResponseEntity<?> refreshToken(HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(refreshAuthenticationUseCase.refreshAuthentication(httpServletRequest));
     }
 }
