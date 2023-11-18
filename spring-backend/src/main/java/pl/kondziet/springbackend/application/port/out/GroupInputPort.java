@@ -5,7 +5,7 @@ import pl.kondziet.springbackend.application.domain.model.id.UserId;
 
 import java.util.Set;
 
-public interface LoadUserGroupsPort {
-
-    Set<Group> loadGroups(UserId userId);
+public interface GroupInputPort {
+    Set<Group> loadUserGroups(UserId userId);
 }
+

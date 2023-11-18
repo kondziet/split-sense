@@ -6,16 +6,17 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupMembershipRepository;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.Group;
+import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
-import pl.kondziet.springbackend.application.port.out.LoadUserGroupsPort;
-import pl.kondziet.springbackend.application.port.out.SaveGroupPort;
+import pl.kondziet.springbackend.application.port.out.GroupInputPort;
+import pl.kondziet.springbackend.application.port.out.GroupOutputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class GroupPersistenceAdapter implements SaveGroupPort, LoadUserGroupsPort {
+public class GroupPersistenceAdapter implements GroupOutputPort, GroupInputPort {
 
     private final GroupRepository groupRepository;
     private final GroupMembershipRepository groupMembershipRepository;
@@ -28,7 +29,12 @@ public class GroupPersistenceAdapter implements SaveGroupPort, LoadUserGroupsPor
     }
 
     @Override
-    public Set<Group> loadGroups(UserId userId) {
+    public void saveGroupMembership(GroupMembership groupMembership) {
+        groupMembershipRepository.save(groupMembership);
+    }
+
+    @Override
+    public Set<Group> loadUserGroups(UserId userId) {
         return groupMapper.groupJpaEntitiesToGroups(groupMembershipRepository.findAllUserGroups(userId.id()));
     }
 }
