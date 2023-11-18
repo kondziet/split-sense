@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.infrastructure;
+package pl.kondziet.springbackend.common;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
