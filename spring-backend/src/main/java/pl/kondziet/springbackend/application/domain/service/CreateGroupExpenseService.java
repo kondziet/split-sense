@@ -7,7 +7,7 @@ import pl.kondziet.springbackend.application.domain.model.entity.Debt;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupExpense;
 import pl.kondziet.springbackend.application.port.in.command.CreateGroupExpenseCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupExpenseUseCase;
-import pl.kondziet.springbackend.application.port.out.SaveGroupExpensePort;
+import pl.kondziet.springbackend.application.port.out.ExpenseOutputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.DebtMapper;
 
 import java.util.Set;
@@ -17,13 +17,13 @@ import java.util.Set;
 @Transactional
 public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
 
-    private final SaveGroupExpensePort saveGroupExpensePort;
+    private final ExpenseOutputPort expenseOutputPort;
     private final DebtMapper debtMapper;
 
     @Override
     public void createGroupExpense(CreateGroupExpenseCommand command) {
 
-        Set<Debt> expenseDebts = debtMapper.debtDetailsToDebts(command.expenseDebtDetails());
+        Set<Debt> expenseDebts = debtMapper.debtRequestsToDebts(command.expenseDebts());
 
         GroupExpense groupExpense = GroupExpense.builder()
                 .name(command.expenseName())
@@ -32,7 +32,7 @@ public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
                 .groupId(command.expenseGroupId())
                 .build();
 
-        saveGroupExpensePort.saveGroupExpense(groupExpense);
+        expenseOutputPort.saveGroupExpense(groupExpense);
 
     }
 }

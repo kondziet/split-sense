@@ -10,7 +10,7 @@ import pl.kondziet.springbackend.application.domain.model.id.UserId;
 import pl.kondziet.springbackend.application.port.in.AuthenticationPrincipalUseCase;
 import pl.kondziet.springbackend.application.port.in.command.CreateGroupCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
-import pl.kondziet.springbackend.application.port.out.LoadUserGroupsPort;
+import pl.kondziet.springbackend.application.port.out.GroupInputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
 import java.util.Set;
@@ -22,7 +22,7 @@ public class GroupController {
 
     private final AuthenticationPrincipalUseCase authenticationPrincipalUseCase;
     private final CreateGroupUseCase createGroupUseCase;
-    private final LoadUserGroupsPort loadUserGroupsPort;
+    private final GroupInputPort groupInputPort;
     private final GroupMapper groupMapper;
 
 
@@ -30,7 +30,7 @@ public class GroupController {
     ResponseEntity<?> getUserGroups() {
         UserId authenticatedUserId = authenticationPrincipalUseCase.getAuthenticatedUserId();
 
-        Set<Group> groups = loadUserGroupsPort.loadGroups(authenticatedUserId);
+        Set<Group> groups = groupInputPort.loadUserGroups(authenticatedUserId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

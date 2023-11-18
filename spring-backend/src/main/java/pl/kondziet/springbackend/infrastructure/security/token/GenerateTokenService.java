@@ -4,23 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.application.port.in.GenerateTokenUseCase;
-import pl.kondziet.springbackend.application.port.out.SaveTokenPort;
+import pl.kondziet.springbackend.application.port.out.TokenOutputPort;
 
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class GenerateTokenService implements GenerateTokenUseCase {
+public class GenerateTokenService {
 
     @Value("${jwt.access-token.expiration}")
     private long accessTokenExpiration;
     @Value("${jwt.refresh-token.expiration}")
     private long refreshTokenExpiration;
-    private final SaveTokenPort saveTokenPort;
+    private final TokenOutputPort tokenOutputPort;
     private final JwtFacade jwtFacade;
 
-    @Override
     public String generateAccessToken(UserDetails userDetails) {
         String builtToken = jwtFacade.buildToken(
                 userDetails,
@@ -35,12 +33,11 @@ public class GenerateTokenService implements GenerateTokenUseCase {
                 .content(builtToken)
                 .build();
 
-        Token savedToken = saveTokenPort.saveToken(accessToken);
+        Token savedToken = tokenOutputPort.saveToken(accessToken);
 
         return savedToken.getContent();
     }
 
-    @Override
     public String generateRefreshToken(UserDetails userDetails) {
         String builtToken = jwtFacade.buildToken(
                 userDetails,
@@ -55,7 +52,7 @@ public class GenerateTokenService implements GenerateTokenUseCase {
                 .content(builtToken)
                 .build();
 
-        Token savedToken = saveTokenPort.saveToken(refreshToken);
+        Token savedToken = tokenOutputPort.saveToken(refreshToken);
 
         return savedToken.getContent();
     }

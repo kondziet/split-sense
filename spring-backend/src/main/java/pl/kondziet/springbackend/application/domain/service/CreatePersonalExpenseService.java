@@ -7,7 +7,7 @@ import pl.kondziet.springbackend.application.domain.model.entity.Debt;
 import pl.kondziet.springbackend.application.domain.model.entity.PersonalExpense;
 import pl.kondziet.springbackend.application.port.in.CreatePersonalExpenseUseCase;
 import pl.kondziet.springbackend.application.port.in.command.CreatePersonalExpenseCommand;
-import pl.kondziet.springbackend.application.port.out.SavePersonalExpensePort;
+import pl.kondziet.springbackend.application.port.out.ExpenseOutputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.DebtMapper;
 
 import java.util.Set;
@@ -17,12 +17,12 @@ import java.util.Set;
 @Transactional
 public class CreatePersonalExpenseService implements CreatePersonalExpenseUseCase {
 
-    private final SavePersonalExpensePort savePersonalExpensePort;
+    private final ExpenseOutputPort expenseOutputPort;
     private final DebtMapper debtMapper;
     @Override
     public void createPersonalExpense(CreatePersonalExpenseCommand command) {
 
-        Set<Debt> expenseDebts = debtMapper.debtDetailsToDebts(command.expenseDebtDetails());
+        Set<Debt> expenseDebts = debtMapper.debtRequestsToDebts(command.expenseDebts());
 
         PersonalExpense personalExpense = PersonalExpense.builder()
                 .name(command.expenseName())
@@ -30,6 +30,6 @@ public class CreatePersonalExpenseService implements CreatePersonalExpenseUseCas
                 .debts(expenseDebts)
                 .build();
 
-        savePersonalExpensePort.savePersonalExpense(personalExpense);
+        expenseOutputPort.savePersonalExpense(personalExpense);
     }
 }
