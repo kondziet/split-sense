@@ -29,8 +29,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
         Set<DebtJpaEntity> debtJpaEntities = groupExpense.getDebts().stream()
                 .map(debt -> DebtJpaEntity.builder()
                         .debtor(em.getReference(UserJpaEntity.class, debt.getDebtorId().id()))
-                        .currency(debt.getCurrency())
-                        .amount(debt.getAmount())
+                        .money(new MoneyJpaEntity(debt.getMoney().getCurrency(), debt.getMoney().getAmount()))
                         .build()
                 )
                 .collect(Collectors.toSet());
@@ -52,8 +51,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
         Set<DebtJpaEntity> debtJpaEntities = personalExpense.getDebts().stream()
                 .map(debt -> DebtJpaEntity.builder()
                         .debtor(em.getReference(UserJpaEntity.class, debt.getDebtorId().id()))
-                        .currency(debt.getCurrency())
-                        .amount(debt.getAmount())
+                        .money(new MoneyJpaEntity(debt.getMoney().getCurrency(), debt.getMoney().getAmount()))
                         .build()
                 )
                 .collect(Collectors.toSet());

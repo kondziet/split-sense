@@ -1,6 +1,6 @@
 package pl.kondziet.springbackend.adapter.out.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Embeddable
-public class DebtJpaEntity {
+public class MoneyJpaEntity {
 
-    @ManyToOne
-    private UserJpaEntity debtor;
-    private MoneyJpaEntity money;
+    private String currency;
+    private BigDecimal amount;
 }
