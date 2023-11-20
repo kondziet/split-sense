@@ -15,6 +15,6 @@ public abstract class Expense {
 
     private ExpenseId id;
     private String name;
-    private UserId payerId;
+    private UserId creditorId;
     private Set<Debt> debts;
 }

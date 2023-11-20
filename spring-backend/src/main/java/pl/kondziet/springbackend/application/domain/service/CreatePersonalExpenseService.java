@@ -26,7 +26,7 @@ public class CreatePersonalExpenseService implements CreatePersonalExpenseUseCas
 
         PersonalExpense personalExpense = PersonalExpense.builder()
                 .name(command.expenseName())
-                .payerId(command.expensePayer())
+                .creditorId(command.expensePayer())
                 .debts(expenseDebts)
                 .build();
 

@@ -23,7 +23,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
 
     @Override
     public void save(GroupExpense groupExpense) {
-        UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, groupExpense.getPayerId().id());
+        UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, groupExpense.getCreditorId().id());
         GroupJpaEntity groupJpaEntity = em.getReference(GroupJpaEntity.class, groupExpense.getGroupId().id());
 
         Set<DebtJpaEntity> debtJpaEntities = groupExpense.getDebts().stream()
@@ -36,7 +36,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
 
         GroupExpenseJpaEntity groupExpenseJpaEntity = GroupExpenseJpaEntity.builder()
                 .name(groupExpense.getName())
-                .payer(userJpaEntity)
+                .creditor(userJpaEntity)
                 .debtJpaEntities(debtJpaEntities)
                 .groupJpaEntity(groupJpaEntity)
                 .build();
@@ -46,7 +46,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
 
     @Override
     public void save(PersonalExpense personalExpense) {
-        UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, personalExpense.getPayerId().id());
+        UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, personalExpense.getCreditorId().id());
 
         Set<DebtJpaEntity> debtJpaEntities = personalExpense.getDebts().stream()
                 .map(debt -> DebtJpaEntity.builder()
@@ -58,7 +58,7 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
 
         PersonalExpenseJpaEntity personalExpenseJpaEntity = PersonalExpenseJpaEntity.builder()
                 .name(personalExpense.getName())
-                .payer(userJpaEntity)
+                .creditor(userJpaEntity)
                 .debtJpaEntities(debtJpaEntities)
                 .build();
 

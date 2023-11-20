@@ -24,7 +24,7 @@ public abstract class ExpenseJpaEntity implements Serializable {
     private UUID id;
     private String name;
     @ManyToOne
-    private UserJpaEntity payer;
+    private UserJpaEntity creditor;
 
     @ElementCollection
     @CollectionTable(

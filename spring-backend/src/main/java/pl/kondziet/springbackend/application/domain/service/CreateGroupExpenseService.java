@@ -27,7 +27,7 @@ public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
 
         GroupExpense groupExpense = GroupExpense.builder()
                 .name(command.expenseName())
-                .payerId(command.expensePayer())
+                .creditorId(command.expensePayer())
                 .debts(expenseDebts)
                 .groupId(command.expenseGroupId())
                 .build();
