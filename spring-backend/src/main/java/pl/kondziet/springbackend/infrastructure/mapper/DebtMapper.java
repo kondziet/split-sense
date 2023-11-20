@@ -3,7 +3,7 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.adapter.in.web.dto.DebtRequest;
+import pl.kondziet.springbackend.application.domain.dto.DebtRequest;
 import pl.kondziet.springbackend.application.domain.model.entity.Debt;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
 

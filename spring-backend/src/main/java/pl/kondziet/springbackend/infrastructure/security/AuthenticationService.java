@@ -8,9 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.adapter.in.web.dto.SignInRequest;
-import pl.kondziet.springbackend.adapter.in.web.dto.SignInResponse;
-import pl.kondziet.springbackend.adapter.in.web.dto.TokenRefreshResponse;
+import pl.kondziet.springbackend.application.domain.dto.SignInRequest;
+import pl.kondziet.springbackend.application.domain.dto.SignInResponse;
+import pl.kondziet.springbackend.application.domain.dto.TokenRefreshResponse;
 import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
 import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
 import pl.kondziet.springbackend.infrastructure.security.token.GenerateTokenService;

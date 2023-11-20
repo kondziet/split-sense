@@ -3,7 +3,7 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.adapter.in.web.dto.GroupResponse;
+import pl.kondziet.springbackend.application.domain.dto.GroupResponse;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.application.domain.model.entity.Group;
 import pl.kondziet.springbackend.application.domain.model.id.GroupId;

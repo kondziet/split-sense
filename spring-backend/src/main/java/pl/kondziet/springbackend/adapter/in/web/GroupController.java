@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kondziet.springbackend.adapter.in.web.dto.GroupRequest;
+import pl.kondziet.springbackend.application.domain.dto.GroupRequest;
 import pl.kondziet.springbackend.application.domain.model.entity.Group;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
 import pl.kondziet.springbackend.application.port.in.AuthenticationPrincipalUseCase;

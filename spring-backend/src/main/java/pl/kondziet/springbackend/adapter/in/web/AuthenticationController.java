@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kondziet.springbackend.adapter.in.web.dto.SignInRequest;
+import pl.kondziet.springbackend.application.domain.dto.SignInRequest;
 import pl.kondziet.springbackend.application.port.in.AuthenticationUseCase;
 import pl.kondziet.springbackend.application.port.in.RefreshAuthenticationUseCase;
 

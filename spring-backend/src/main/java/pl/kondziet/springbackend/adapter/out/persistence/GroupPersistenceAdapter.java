@@ -29,11 +29,6 @@ public class GroupPersistenceAdapter implements GroupOutputPort, GroupInputPort 
     }
 
     @Override
-    public void saveGroupMembership(GroupMembership groupMembership) {
-        groupMembershipRepository.save(groupMembership);
-    }
-
-    @Override
     public Set<Group> loadUserGroups(UserId userId) {
         return groupMapper.groupJpaEntitiesToGroups(groupMembershipRepository.findAllUserGroups(userId.id()));
     }

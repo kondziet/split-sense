@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.adapter.in.web.dto;
+package pl.kondziet.springbackend.application.domain.dto;
 
 import java.util.List;
 import java.util.UUID;
