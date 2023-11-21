@@ -1,12 +1,12 @@
 package pl.kondziet.springbackend.adapter.out.persistence.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomGroupRepository;
+import pl.kondziet.springbackend.application.domain.model.entity.Group;
+import pl.kondziet.springbackend.application.domain.model.id.UserId;
 
-import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 
-public interface GroupRepository extends JpaRepository<GroupJpaEntity, UUID>, CustomGroupRepository {
-
-
+public interface GroupRepository {
+    Optional<Group> save(Group group);
+    List<Group> findAllUserGroups(UserId userId);
 }

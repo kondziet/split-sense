@@ -12,6 +12,7 @@ import pl.kondziet.springbackend.application.port.out.GroupInputPort;
 import pl.kondziet.springbackend.application.port.out.GroupOutputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -19,17 +20,14 @@ import java.util.Set;
 public class GroupPersistenceAdapter implements GroupOutputPort, GroupInputPort {
 
     private final GroupRepository groupRepository;
-    private final GroupMembershipRepository groupMembershipRepository;
-    private final GroupMapper groupMapper;
 
     @Override
     public Group saveGroup(Group group) {
-        GroupJpaEntity savedGroup = groupRepository.save(group);
-        return groupMapper.groupJpaEntityToGroup(savedGroup);
+        return groupRepository.save(group).orElseThrow();
     }
 
     @Override
-    public Set<Group> loadUserGroups(UserId userId) {
-        return groupMapper.groupJpaEntitiesToGroups(groupMembershipRepository.findAllUserGroups(userId.id()));
+    public List<Group> loadUserGroups(UserId userId) {
+        return groupRepository.findAllUserGroups(userId);
     }
 }

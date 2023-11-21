@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.adapter.out.persistence.repository.custom.impl;
+package pl.kondziet.springbackend.adapter.out.persistence.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -6,9 +6,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.*;
-import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomExpenseRepository;
+import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupExpenseRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupExpense;
-import pl.kondziet.springbackend.application.domain.model.entity.PersonalExpense;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,11 +15,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Repository
 @Transactional
-public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
+public class GroupExpenseRepositoryImpl implements GroupExpenseRepository {
 
     @PersistenceContext
     private EntityManager em;
-
     @Override
     public void save(GroupExpense groupExpense) {
         UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, groupExpense.getCreditorId().id());
@@ -42,26 +40,5 @@ public class CustomExpenseRepositoryImpl implements CustomExpenseRepository {
                 .build();
 
         em.persist(groupExpenseJpaEntity);
-    }
-
-    @Override
-    public void save(PersonalExpense personalExpense) {
-        UserJpaEntity userJpaEntity = em.getReference(UserJpaEntity.class, personalExpense.getCreditorId().id());
-
-        Set<DebtJpaEntity> debtJpaEntities = personalExpense.getDebts().stream()
-                .map(debt -> DebtJpaEntity.builder()
-                        .debtor(em.getReference(UserJpaEntity.class, debt.getDebtorId().id()))
-                        .money(new MoneyJpaEntity(debt.getMoney().getCurrency(), debt.getMoney().getAmount()))
-                        .build()
-                )
-                .collect(Collectors.toSet());
-
-        PersonalExpenseJpaEntity personalExpenseJpaEntity = PersonalExpenseJpaEntity.builder()
-                .name(personalExpense.getName())
-                .creditor(userJpaEntity)
-                .debtJpaEntities(debtJpaEntities)
-                .build();
-
-        em.persist(personalExpenseJpaEntity);
     }
 }

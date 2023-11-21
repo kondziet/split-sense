@@ -13,6 +13,7 @@ import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
 import pl.kondziet.springbackend.application.port.out.GroupInputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class GroupController {
     ResponseEntity<?> getUserGroups() {
         UserId authenticatedUserId = authenticationPrincipalUseCase.getAuthenticatedUserId();
 
-        Set<Group> groups = groupInputPort.loadUserGroups(authenticatedUserId);
+        List<Group> groups = groupInputPort.loadUserGroups(authenticatedUserId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

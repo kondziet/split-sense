@@ -13,11 +13,9 @@ import pl.kondziet.springbackend.infrastructure.security.token.Token;
 public class TokenPersistenceAdapter implements TokenOutputPort {
 
     private final TokenRepository tokenRepository;
-    private final TokenMapper tokenMapper;
 
     @Override
     public Token saveToken(Token token) {
-        TokenJpaEntity savedToken = tokenRepository.save(tokenMapper.tokenToTokenJpaEntity(token));
-        return tokenMapper.tokenJpaEntityToToken(savedToken);
+        return tokenRepository.save(token);
     }
 }

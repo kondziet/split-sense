@@ -9,13 +9,14 @@ import pl.kondziet.springbackend.application.domain.model.entity.Group;
 import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface GroupMapper {
 
-    Set<GroupResponse> groupsToGroupResponses(Set<Group> groups);
+    List<GroupResponse> groupsToGroupResponses(List<Group> groups);
     GroupResponse groupToGroupResponse(Group group);
 
     @Mapping(target = "id", source = "groupJpaEntity.id", qualifiedByName = "idToGroupId")
@@ -32,6 +33,6 @@ public interface GroupMapper {
         return new GroupId(id);
     }
 
-    Set<Group> groupJpaEntitiesToGroups(Set<GroupJpaEntity> groupJpaEntities);
+    List<Group> groupJpaEntitiesToGroups(List<GroupJpaEntity> groupJpaEntities);
 
 }

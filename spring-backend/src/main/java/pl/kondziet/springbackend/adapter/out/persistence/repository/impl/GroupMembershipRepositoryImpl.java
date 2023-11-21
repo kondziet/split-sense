@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.adapter.out.persistence.repository.custom.impl;
+package pl.kondziet.springbackend.adapter.out.persistence.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.repository.custom.CustomGroupMembershipRepository;
+import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupMembershipRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
+
 
 @AllArgsConstructor
 @Repository
 @Transactional
-public class CustomGroupMembershipRepositoryImpl implements CustomGroupMembershipRepository {
+public class GroupMembershipRepositoryImpl implements GroupMembershipRepository {
 
     @PersistenceContext
     private EntityManager em;
