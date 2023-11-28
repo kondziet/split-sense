@@ -10,6 +10,7 @@ import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.Group;
+import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
@@ -55,5 +56,21 @@ public class GroupRepositoryImpl implements GroupRepository {
 
         List<GroupJpaEntity> resultList = query.getResultList();
         return groupMapper.groupJpaEntitiesToGroups(resultList);
+    }
+
+    @Override
+    public Optional<Group> findGroupById(GroupId groupId) {
+        String jpql = """
+                SELECT g
+                FROM GroupJpaEntity  g
+                WHERE g.id = :groupId
+                """;
+        TypedQuery<GroupJpaEntity> query = em.createQuery(jpql, GroupJpaEntity.class);
+
+        UUID uuid = groupId.id();
+        query.setParameter("groupId", uuid);
+
+        GroupJpaEntity result = query.getSingleResult();
+        return Optional.of(groupMapper.groupJpaEntityToGroup(result));
     }
 }

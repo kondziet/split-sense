@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.UserRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.User;
+import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.infrastructure.mapper.UserMapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Repository

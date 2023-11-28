@@ -7,6 +7,8 @@ import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupMembers
 import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupRepository;
 import pl.kondziet.springbackend.application.domain.model.entity.Group;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
+import pl.kondziet.springbackend.application.domain.model.entity.User;
+import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.application.domain.model.id.UserId;
 import pl.kondziet.springbackend.application.port.out.GroupInputPort;
 import pl.kondziet.springbackend.application.port.out.GroupOutputPort;
@@ -29,5 +31,10 @@ public class GroupPersistenceAdapter implements GroupOutputPort, GroupInputPort 
     @Override
     public List<Group> loadUserGroups(UserId userId) {
         return groupRepository.findAllUserGroups(userId);
+    }
+
+    @Override
+    public Group loadGroupById(GroupId groupId) {
+        return groupRepository.findGroupById(groupId).orElseThrow();
     }
 }

@@ -10,6 +10,7 @@ import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.application.port.out.ExpenseInputPort;
 import pl.kondziet.springbackend.application.port.out.ExpenseOutputPort;
 
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class ExpensePersistenceAdapter implements ExpenseOutputPort, ExpenseInpu
     }
 
     @Override
-    public Set<GroupExpense> loadGroupExpenses(GroupId groupId) {
-        return null;
+    public List<GroupExpense> loadGroupExpenses(GroupId groupId) {
+        return groupExpenseRepository.findAllExpenses(groupId);
     }
 }

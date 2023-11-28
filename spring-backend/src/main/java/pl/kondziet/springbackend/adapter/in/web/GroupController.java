@@ -14,7 +14,6 @@ import pl.kondziet.springbackend.application.port.out.GroupInputPort;
 import pl.kondziet.springbackend.infrastructure.mapper.GroupMapper;
 
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @RestController
