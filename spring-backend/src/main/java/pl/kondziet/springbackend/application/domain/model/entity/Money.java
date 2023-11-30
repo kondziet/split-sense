@@ -39,6 +39,11 @@ public class Money {
         return new Money(exchangeRate.getTargetCurrency(), newAmount);
     }
 
+    public Money changeSign() {
+        BigDecimal newAmount = this.amount.negate();
+        return new Money(this.currency, newAmount);
+    }
+
     public boolean isLowerThanZero() {
         return this.amount.compareTo(BigDecimal.ZERO) < 0;
     }

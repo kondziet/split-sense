@@ -36,36 +36,35 @@ public class CalculateGroupReimbursementsService implements CalculateGroupReimbu
             Map.Entry<UserId, Money> highestBalance = findBalanceWithHighestAmount(balances);
             Map.Entry<UserId, Money> lowestBalance = findBalanceWithLowestAmount(balances);
 
-            Money subtract = highestBalance.getValue().add(lowestBalance.getValue());
+            Money reimbursementAmount = Money.zeroAmount(group.getCurrency());
+            Money highestLowestDifference = highestBalance.getValue().add(lowestBalance.getValue());
 
-            if (subtract.isEqualToZero()) {
-                reimbursements.add(new Reimbursement(
-                        lowestBalance.getKey(),
-                        highestBalance.getKey(),
-                        lowestBalance.getValue())
-                );
-                balances.remove(highestBalance.getKey());
-                balances.remove(lowestBalance.getKey());
-            } else if (subtract.isLowerThanZero()) {
+            if (highestLowestDifference.isEqualToZero()) {
+                reimbursementAmount = lowestBalance.getValue().changeSign();
 
-                reimbursements.add(new Reimbursement(
-                        lowestBalance.getKey(),
-                        highestBalance.getKey(),
-                        lowestBalance.getValue().subtract(subtract))
-                );
                 balances.remove(highestBalance.getKey());
                 balances.remove(lowestBalance.getKey());
-                balances.put(lowestBalance.getKey(), subtract);
-            } else if (subtract.isGreaterThanZero()) {
-                reimbursements.add(new Reimbursement(
-                        lowestBalance.getKey(),
-                        highestBalance.getKey(),
-                        lowestBalance.getValue())
-                );
+            } else if (highestLowestDifference.isLowerThanZero()) {
+                reimbursementAmount = lowestBalance.getValue().subtract(highestLowestDifference).changeSign();
+
                 balances.remove(highestBalance.getKey());
                 balances.remove(lowestBalance.getKey());
-                balances.put(highestBalance.getKey(), subtract);
+
+                balances.put(lowestBalance.getKey(), highestLowestDifference);
+            } else if (highestLowestDifference.isGreaterThanZero()) {
+                reimbursementAmount = lowestBalance.getValue().changeSign();
+
+                balances.remove(highestBalance.getKey());
+                balances.remove(lowestBalance.getKey());
+
+                balances.put(highestBalance.getKey(), highestLowestDifference);
             }
+
+            reimbursements.add(new Reimbursement(
+                    lowestBalance.getKey(),
+                    highestBalance.getKey(),
+                    reimbursementAmount)
+            );
         }
 
         return reimbursements;
