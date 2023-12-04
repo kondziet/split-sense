@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @Builder
-public class Money {
+public class Money implements Comparable<Money> {
 
     private String currency;
     private BigDecimal amount;
@@ -54,6 +54,13 @@ public class Money {
 
     public boolean isEqualToZero() {
         return this.amount.compareTo(BigDecimal.ZERO) == 0;
+    }
+
+    @Override
+    public int compareTo(Money other) {
+        checkCurrencyMatch(other);
+
+        return amount.compareTo(other.amount);
     }
 
     private void checkCurrencyMatch(Money other) {

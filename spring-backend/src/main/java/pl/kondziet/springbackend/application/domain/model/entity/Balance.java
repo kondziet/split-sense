@@ -8,8 +8,13 @@ import pl.kondziet.springbackend.application.domain.model.id.UserId;
 @Data
 @AllArgsConstructor
 @Builder
-public class Balance {
+public class Balance implements Comparable<Balance> {
 
     private UserId userId;
     private Money money;
+
+    @Override
+    public int compareTo(Balance balance) {
+        return money.compareTo(balance.getMoney());
+    }
 }
