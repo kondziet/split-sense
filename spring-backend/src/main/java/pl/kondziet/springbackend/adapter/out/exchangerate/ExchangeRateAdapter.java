@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import pl.kondziet.springbackend.application.domain.model.entity.ExchangeRate;
-import pl.kondziet.springbackend.application.port.out.ExchangeRateInputPort;
+import pl.kondziet.springbackend.application.port.out.ExchangeRateFetchPort;
 
 @Component
-public class ExchangeRateAdapter implements ExchangeRateInputPort {
+public class ExchangeRateAdapter implements ExchangeRateFetchPort {
 
     private final WebClient webClient;
     private final String apiKey;

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.application.domain.model.entity.*;
 import pl.kondziet.springbackend.application.domain.model.id.GroupId;
 import pl.kondziet.springbackend.application.port.in.CalculateGroupReimbursementsUseCase;
-import pl.kondziet.springbackend.application.port.out.ExpenseInputPort;
-import pl.kondziet.springbackend.application.port.out.GroupInputPort;
+import pl.kondziet.springbackend.application.port.out.ExpensePersistencePort;
+import pl.kondziet.springbackend.application.port.out.GroupPersistencePort;
 
 import java.util.*;
 
@@ -14,17 +14,17 @@ import java.util.*;
 @Service
 public class CalculateGroupReimbursementsService implements CalculateGroupReimbursementsUseCase {
 
-    private final ExpenseInputPort expenseInputPort;
-    private final GroupInputPort groupInputPort;
+    private final ExpensePersistencePort expensePersistencePort;
+    private final GroupPersistencePort groupPersistencePort;
     private final BalanceCalculator balanceCalculator;
     private final ReimbursementCalculator reimbursementCalculator;
     private final ExchangeRateConverter exchangeRateConverter;
 
     @Override
     public List<Reimbursement> calculateReimbursements(GroupId groupId) {
-        Group group = groupInputPort.loadGroupById(groupId);
+        Group group = groupPersistencePort.loadGroupById(groupId);
 
-        List<GroupExpense> groupExpenses = expenseInputPort.loadGroupExpenses(groupId);
+        List<GroupExpense> groupExpenses = expensePersistencePort.loadGroupExpenses(groupId);
         List<GroupExpense> exchangedExpenses = exchangeRateConverter.convert(groupExpenses, group);
         List<Balance> groupBalances = balanceCalculator.calculateGroupBalances(exchangedExpenses, group);
 

@@ -3,7 +3,7 @@ package pl.kondziet.springbackend.application.domain.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.application.domain.model.entity.*;
-import pl.kondziet.springbackend.application.port.out.ExchangeRateInputPort;
+import pl.kondziet.springbackend.application.port.out.ExchangeRateFetchPort;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExchangeRateConverter {
 
-    private final ExchangeRateInputPort exchangeRateInputPort;
+    private final ExchangeRateFetchPort exchangeRateFetchPort;
 
     public List<GroupExpense> convert (List<GroupExpense> groupExpenses, Group group) {
 
@@ -20,7 +20,7 @@ public class ExchangeRateConverter {
                 Money moneyOwed = debt.getMoney();
 
                 if (!moneyOwed.getCurrency().equals(group.getCurrency())) {
-                    ExchangeRate exchangeRate = exchangeRateInputPort.loadExchangeRate(moneyOwed.getCurrency(), group.getCurrency());
+                    ExchangeRate exchangeRate = exchangeRateFetchPort.loadExchangeRate(moneyOwed.getCurrency(), group.getCurrency());
                     moneyOwed = moneyOwed.applyExchangeRate(exchangeRate);
                 }
 

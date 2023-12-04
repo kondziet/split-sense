@@ -11,7 +11,7 @@ public class ReimbursementCalculator {
 
     public List<Reimbursement> calculateGroupReimbursements(List<Balance> groupBalances, Group group) {
 
-        SortedBalanceContainer balances = SortedBalanceContainer.of(groupBalances);
+        SortedContainer<Balance> balances = SortedContainer.of(groupBalances);
 
         List<Reimbursement> reimbursements = new ArrayList<>();
 

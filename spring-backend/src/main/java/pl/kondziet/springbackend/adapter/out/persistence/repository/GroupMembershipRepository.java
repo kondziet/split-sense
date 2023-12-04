@@ -1,13 +1,9 @@
 package pl.kondziet.springbackend.adapter.out.persistence.repository;
 
-import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
-import pl.kondziet.springbackend.application.domain.model.entity.User;
-import pl.kondziet.springbackend.application.domain.model.id.GroupId;
+import org.springframework.data.jpa.repository.JpaRepository;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
 
-import java.util.List;
+import java.util.UUID;
 
-public interface GroupMembershipRepository {
-
-    void save(GroupMembership groupMembership);
-    List<User> findGroupMembers(GroupId groupId);
+public interface GroupMembershipRepository extends JpaRepository<GroupMembershipJpaEntity, UUID> {
 }

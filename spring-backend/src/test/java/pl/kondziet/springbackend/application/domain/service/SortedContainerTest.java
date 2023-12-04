@@ -15,9 +15,7 @@ class SortedContainerTest {
 
     @Test
     void testSortedBalanceContainerOperations() {
-        List<Balance> balances = generateBalances();
-
-        SortedContainer<Balance> container = SortedContainer.of(balances);
+        SortedContainer<Balance> container = SortedContainer.of(generateBalances());
 
         assertEquals(20, container.size());
         assertFalse(container.isEmpty());

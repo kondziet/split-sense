@@ -7,7 +7,7 @@ import pl.kondziet.springbackend.application.domain.model.entity.Debt;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupExpense;
 import pl.kondziet.springbackend.application.port.in.command.CreateGroupExpenseCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupExpenseUseCase;
-import pl.kondziet.springbackend.application.port.out.ExpenseOutputPort;
+import pl.kondziet.springbackend.application.port.out.ExpensePersistencePort;
 import pl.kondziet.springbackend.infrastructure.mapper.DebtMapper;
 
 import java.util.Set;
@@ -17,7 +17,7 @@ import java.util.Set;
 @Transactional
 public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
 
-    private final ExpenseOutputPort expenseOutputPort;
+    private final ExpensePersistencePort expensePersistencePort;
     private final DebtMapper debtMapper;
 
     @Override
@@ -32,7 +32,7 @@ public class CreateGroupExpenseService implements CreateGroupExpenseUseCase {
                 .groupId(command.expenseGroupId())
                 .build();
 
-        expenseOutputPort.saveGroupExpense(groupExpense);
+        expensePersistencePort.saveGroupExpense(groupExpense);
 
     }
 }

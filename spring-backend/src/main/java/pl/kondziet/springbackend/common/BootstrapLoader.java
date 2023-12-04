@@ -6,27 +6,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.repository.GroupMembershipRepository;
 import pl.kondziet.springbackend.adapter.out.persistence.repository.UserRepository;
-import pl.kondziet.springbackend.application.domain.model.entity.Group;
-import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
-import pl.kondziet.springbackend.application.domain.model.id.GroupId;
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
-import pl.kondziet.springbackend.application.port.in.command.CreateGroupCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
-import pl.kondziet.springbackend.application.port.out.GroupInputPort;
-import pl.kondziet.springbackend.application.port.out.GroupMembershipInputPort;
-import pl.kondziet.springbackend.application.port.out.GroupMembershipOutputPort;
-
-import java.util.List;
+import pl.kondziet.springbackend.application.port.out.GroupPersistencePort;
+import pl.kondziet.springbackend.application.port.out.GroupMembershipPersistencePort;
 
 @AllArgsConstructor
 @Component
 public class BootstrapLoader implements CommandLineRunner {
 
     private final CreateGroupUseCase createGroupUseCase;
-    private final GroupMembershipOutputPort groupMembershipOutputPort;
-    private final GroupInputPort groupInputPort;
+    private final GroupMembershipPersistencePort groupMembershipPersistencePort;
+    private final GroupPersistencePort groupPersistencePort;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,17 +39,17 @@ public class BootstrapLoader implements CommandLineRunner {
         UserJpaEntity savedUser1 = userRepository.save(userJpaEntity1);
         UserJpaEntity savedUser2 = userRepository.save(userJpaEntity2);
 
-        CreateGroupCommand command = CreateGroupCommand.builder()
-                .groupName("farm lovers")
-                .groupCurrency("USD")
-                .groupOwnerId(new UserId(savedUser1.getId()))
-                .build();
-
-        createGroupUseCase.createGroup(command);
-
-        List<Group> groups = groupInputPort.loadUserGroups(new UserId(savedUser1.getId()));
-
-        groupMembershipOutputPort.saveGroupMembership(new GroupMembership(new UserId(savedUser2.getId()), groups.stream().findFirst().get().getId()));
+//        CreateGroupCommand command = CreateGroupCommand.builder()
+//                .groupName("farm lovers")
+//                .groupCurrency("USD")
+//                .groupOwnerId(new UserId(savedUser1.getId()))
+//                .build();
+//
+//        createGroupUseCase.createGroup(command);
+//
+//        List<Group> groups = groupInputPort.loadUserGroups(new UserId(savedUser1.getId()));
+//
+//        groupMembershipOutputPort.saveGroupMembership(new GroupMembership(new UserId(savedUser2.getId()), groups.stream().findFirst().get().getId()));
 
     }
 }

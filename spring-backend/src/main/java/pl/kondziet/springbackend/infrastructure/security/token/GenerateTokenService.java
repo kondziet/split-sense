@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.application.port.out.TokenOutputPort;
+import pl.kondziet.springbackend.application.port.out.TokenPersistencePort;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class GenerateTokenService {
     private long accessTokenExpiration;
     @Value("${jwt.refresh-token.expiration}")
     private long refreshTokenExpiration;
-    private final TokenOutputPort tokenOutputPort;
+    private final TokenPersistencePort tokenPersistencePort;
     private final JwtFacade jwtFacade;
 
     public String generateAccessToken(UserDetails userDetails) {
@@ -33,7 +33,7 @@ public class GenerateTokenService {
                 .content(builtToken)
                 .build();
 
-        Token savedToken = tokenOutputPort.saveToken(accessToken);
+        Token savedToken = tokenPersistencePort.saveToken(accessToken);
 
         return savedToken.getContent();
     }
@@ -52,7 +52,7 @@ public class GenerateTokenService {
                 .content(builtToken)
                 .build();
 
-        Token savedToken = tokenOutputPort.saveToken(refreshToken);
+        Token savedToken = tokenPersistencePort.saveToken(refreshToken);
 
         return savedToken.getContent();
     }

@@ -1,8 +1,9 @@
 package pl.kondziet.springbackend.adapter.out.persistence.repository;
 
-import pl.kondziet.springbackend.infrastructure.security.token.Token;
+import org.springframework.data.jpa.repository.JpaRepository;
+import pl.kondziet.springbackend.adapter.out.persistence.entity.TokenJpaEntity;
 
-public interface TokenRepository {
+import java.util.UUID;
 
-    Token save(Token token);
+public interface TokenRepository extends JpaRepository<TokenJpaEntity, UUID> {
 }

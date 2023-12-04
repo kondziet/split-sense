@@ -7,16 +7,16 @@ import pl.kondziet.springbackend.application.domain.model.entity.Group;
 import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
 import pl.kondziet.springbackend.application.port.in.command.CreateGroupCommand;
 import pl.kondziet.springbackend.application.port.in.CreateGroupUseCase;
-import pl.kondziet.springbackend.application.port.out.GroupOutputPort;
-import pl.kondziet.springbackend.application.port.out.GroupMembershipOutputPort;
+import pl.kondziet.springbackend.application.port.out.GroupMembershipPersistencePort;
+import pl.kondziet.springbackend.application.port.out.GroupPersistencePort;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
 public class CreateGroupService implements CreateGroupUseCase {
 
-    private final GroupOutputPort groupOutputPort;
-    private final GroupMembershipOutputPort groupMembershipOutputPort;
+    private final GroupPersistencePort groupPersistencePort;
+    private final GroupMembershipPersistencePort groupMembershipPersistencePort;
     @Override
     public void createGroup(CreateGroupCommand command) {
         Group group = Group.builder()
@@ -25,13 +25,13 @@ public class CreateGroupService implements CreateGroupUseCase {
                 .ownerId(command.groupOwnerId())
                 .build();
 
-        Group savedGroup = groupOutputPort.saveGroup(group);
+        Group savedGroup = groupPersistencePort.saveGroup(group);
 
         GroupMembership groupMembership = GroupMembership.builder()
                 .userId(command.groupOwnerId())
                 .groupId(savedGroup.getId())
                 .build();
 
-        groupMembershipOutputPort.saveGroupMembership(groupMembership);
+        groupMembershipPersistencePort.saveGroupMembership(groupMembership);
     }
 }
