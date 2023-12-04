@@ -48,7 +48,7 @@ public class SortedContainer<T extends Comparable<T>> {
 
     public T removeMax() {
         if (isEmpty()) {
-            throw new IllegalStateException("SortedBalanceContainer is empty");
+            throw new IllegalStateException("SortedContainer is empty");
         }
 
         T max = sortedData[leftIndex];
@@ -60,7 +60,7 @@ public class SortedContainer<T extends Comparable<T>> {
 
     public T removeMin() {
         if (isEmpty()) {
-            throw new IllegalStateException("SortedBalanceContainer is empty");
+            throw new IllegalStateException("SortedContainer is empty");
         }
 
         T min = sortedData[rightIndex];
@@ -72,7 +72,7 @@ public class SortedContainer<T extends Comparable<T>> {
 
     public T getMax() {
         if (isEmpty()) {
-            throw new IllegalStateException("SortedBalanceContainer is empty");
+            throw new IllegalStateException("SortedContainer is empty");
         }
 
         return sortedData[leftIndex];
@@ -80,7 +80,7 @@ public class SortedContainer<T extends Comparable<T>> {
 
     public T getMin() {
         if (isEmpty()) {
-            throw new IllegalStateException("SortedBalanceContainer is empty");
+            throw new IllegalStateException("SortedContainer is empty");
         }
 
         return sortedData[rightIndex];
