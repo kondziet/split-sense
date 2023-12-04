@@ -1,30 +1,28 @@
 package pl.kondziet.springbackend.application.domain.service;
 
-import pl.kondziet.springbackend.application.domain.model.entity.Balance;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class SortedBalanceContainer {
+public class SortedContainer<T extends Comparable<T>> {
 
-    private final Balance[] sortedData;
+    private final T[] sortedData;
     private int leftIndex;
     private int rightIndex;
 
-    private SortedBalanceContainer(Balance[] data, int left, int right) {
+    private SortedContainer(T[] data, int left, int right) {
         this.sortedData = data;
         this.leftIndex = left;
         this.rightIndex = right;
     }
 
-    public static SortedBalanceContainer of(List<Balance> balances) {
-        Balance[] sortedArray = balances.stream().sorted(Comparator.reverseOrder()).toArray(Balance[]::new);
+    public static <T extends Comparable<T>> SortedContainer<T> of(List<T> balances) {
+        T[] sortedArray = balances.stream().sorted(Comparator.reverseOrder()).toArray(size -> (T[]) new Comparable[size]);
 
-        return new SortedBalanceContainer(sortedArray, 0, sortedArray.length - 1);
+        return new SortedContainer<>(sortedArray, 0, sortedArray.length - 1);
     }
 
-    public void updateMax(Balance updated) {
+    public void updateMax(T updated) {
         sortedData[leftIndex] = updated;
 
         int sourceIndex = leftIndex;
@@ -36,7 +34,7 @@ public class SortedBalanceContainer {
         }
     }
 
-    public void updateMin(Balance updated) {
+    public void updateMin(T updated) {
         sortedData[rightIndex] = updated;
 
         int sourceIndex = rightIndex;
@@ -48,31 +46,31 @@ public class SortedBalanceContainer {
         }
     }
 
-    public Balance removeMax() {
+    public T removeMax() {
         if (isEmpty()) {
             throw new IllegalStateException("SortedBalanceContainer is empty");
         }
 
-        Balance max = sortedData[leftIndex];
+        T max = sortedData[leftIndex];
         sortedData[leftIndex] = null;
         leftIndex++;
 
         return max;
     }
 
-    public Balance removeMin() {
+    public T removeMin() {
         if (isEmpty()) {
             throw new IllegalStateException("SortedBalanceContainer is empty");
         }
 
-        Balance min = sortedData[rightIndex];
+        T min = sortedData[rightIndex];
         sortedData[rightIndex] = null;
         rightIndex--;
 
         return min;
     }
 
-    public Balance getMax() {
+    public T getMax() {
         if (isEmpty()) {
             throw new IllegalStateException("SortedBalanceContainer is empty");
         }
@@ -80,7 +78,7 @@ public class SortedBalanceContainer {
         return sortedData[leftIndex];
     }
 
-    public Balance getMin() {
+    public T getMin() {
         if (isEmpty()) {
             throw new IllegalStateException("SortedBalanceContainer is empty");
         }
@@ -88,7 +86,7 @@ public class SortedBalanceContainer {
         return sortedData[rightIndex];
     }
 
-    public Balance get(int index) {
+    public T get(int index) {
         if (leftIndex + index < leftIndex || leftIndex + index > rightIndex) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
@@ -105,7 +103,7 @@ public class SortedBalanceContainer {
     }
 
     private void swap(int sourceIndex, int targetIndex) {
-        Balance tmp = sortedData[sourceIndex];
+        T tmp = sortedData[sourceIndex];
         sortedData[sourceIndex] = sortedData[targetIndex];
         sortedData[targetIndex] = tmp;
     }

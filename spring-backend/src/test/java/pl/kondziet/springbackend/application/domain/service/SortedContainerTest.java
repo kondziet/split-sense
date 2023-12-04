@@ -11,13 +11,13 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SortedBalanceContainerTest {
+class SortedContainerTest {
 
     @Test
     void testSortedBalanceContainerOperations() {
         List<Balance> balances = generateBalances();
 
-        SortedBalanceContainer container = SortedBalanceContainer.of(balances);
+        SortedContainer<Balance> container = SortedContainer.of(balances);
 
         assertEquals(20, container.size());
         assertFalse(container.isEmpty());
@@ -51,7 +51,7 @@ class SortedBalanceContainerTest {
 
     @Test
     void testEmptySortedBalanceContainer() {
-        SortedBalanceContainer container = SortedBalanceContainer.of(List.of());
+        SortedContainer<Balance> container = SortedContainer.of(List.<Balance>of());
 
         assertEquals(0, container.size());
         assertTrue(container.isEmpty());
@@ -64,7 +64,7 @@ class SortedBalanceContainerTest {
 
     @Test
     void testIndexOutOfBoundsException() {
-        SortedBalanceContainer container = SortedBalanceContainer.of(generateBalances());
+        SortedContainer<Balance> container = SortedContainer.of(generateBalances());
 
         assertThrows(IndexOutOfBoundsException.class, () -> container.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> container.get(20));
