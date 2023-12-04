@@ -1,10 +1,10 @@
 package pl.kondziet.springbackend.infrastructure.mapper;
 
 import org.mapstruct.Mapper;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.GroupJpaEntity;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.GroupMembershipJpaEntity;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import pl.kondziet.springbackend.domain.model.entity.GroupMembership;
 
 @Mapper(componentModel = "spring")
 public interface GroupMembershipMapper {

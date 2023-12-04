@@ -1,8 +1,8 @@
 package pl.kondziet.springbackend.application.port.out;
 
-import pl.kondziet.springbackend.application.domain.model.entity.GroupExpense;
-import pl.kondziet.springbackend.application.domain.model.entity.PersonalExpense;
-import pl.kondziet.springbackend.application.domain.model.id.GroupId;
+import pl.kondziet.springbackend.domain.model.entity.GroupExpense;
+import pl.kondziet.springbackend.domain.model.entity.PersonalExpense;
+import pl.kondziet.springbackend.domain.model.valueobjects.GroupId;
 
 import java.util.List;
 

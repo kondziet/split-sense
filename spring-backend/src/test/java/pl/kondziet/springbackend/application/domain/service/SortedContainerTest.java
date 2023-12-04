@@ -1,9 +1,10 @@
 package pl.kondziet.springbackend.application.domain.service;
 
 import org.junit.jupiter.api.Test;
-import pl.kondziet.springbackend.application.domain.model.entity.Balance;
-import pl.kondziet.springbackend.application.domain.model.entity.Money;
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.domain.model.entity.Balance;
+import pl.kondziet.springbackend.domain.model.entity.Money;
+import pl.kondziet.springbackend.domain.model.valueobjects.UserId;
+import pl.kondziet.springbackend.application.service.SortedContainer;
 
 import java.math.BigDecimal;
 import java.util.List;

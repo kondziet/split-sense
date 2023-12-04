@@ -1,7 +1,7 @@
 package pl.kondziet.springbackend.application.port.in;
 
-import pl.kondziet.springbackend.application.domain.model.entity.Reimbursement;
-import pl.kondziet.springbackend.application.domain.model.id.GroupId;
+import pl.kondziet.springbackend.domain.model.entity.Reimbursement;
+import pl.kondziet.springbackend.domain.model.valueobjects.GroupId;
 
 import java.util.List;
 

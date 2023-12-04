@@ -3,17 +3,14 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupMembershipJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.application.domain.dto.GroupResponse;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.GroupJpaEntity;
-import pl.kondziet.springbackend.application.domain.model.entity.Group;
-import pl.kondziet.springbackend.application.domain.model.entity.GroupMembership;
-import pl.kondziet.springbackend.application.domain.model.id.GroupId;
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import pl.kondziet.springbackend.domain.dto.GroupResponse;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.GroupJpaEntity;
+import pl.kondziet.springbackend.domain.model.entity.Group;
+import pl.kondziet.springbackend.domain.model.valueobjects.GroupId;
+import pl.kondziet.springbackend.domain.model.valueobjects.UserId;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring")

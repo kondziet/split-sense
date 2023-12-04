@@ -3,10 +3,10 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.application.domain.dto.DebtRequest;
-import pl.kondziet.springbackend.application.domain.model.entity.Debt;
-import pl.kondziet.springbackend.application.domain.model.entity.Money;
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.domain.dto.DebtRequest;
+import pl.kondziet.springbackend.domain.model.entity.Debt;
+import pl.kondziet.springbackend.domain.model.entity.Money;
+import pl.kondziet.springbackend.domain.model.valueobjects.UserId;
 
 import java.util.Set;
 import java.util.UUID;

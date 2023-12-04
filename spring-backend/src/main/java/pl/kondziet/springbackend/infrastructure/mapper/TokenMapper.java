@@ -3,8 +3,8 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.TokenJpaEntity;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.TokenTypeJpaEntity;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.TokenJpaEntity;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.TokenTypeJpaEntity;
 import pl.kondziet.springbackend.infrastructure.security.token.Token;
 import pl.kondziet.springbackend.infrastructure.security.token.TokenType;
 

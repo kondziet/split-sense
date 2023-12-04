@@ -3,9 +3,9 @@ package pl.kondziet.springbackend.infrastructure.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import pl.kondziet.springbackend.adapter.out.persistence.entity.UserJpaEntity;
-import pl.kondziet.springbackend.application.domain.model.entity.User;
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import pl.kondziet.springbackend.domain.model.entity.User;
+import pl.kondziet.springbackend.domain.model.valueobjects.UserId;
 
 import java.util.List;
 import java.util.UUID;

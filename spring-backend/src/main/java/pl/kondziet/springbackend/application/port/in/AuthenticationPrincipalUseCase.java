@@ -1,6 +1,6 @@
 package pl.kondziet.springbackend.application.port.in;
 
-import pl.kondziet.springbackend.application.domain.model.id.UserId;
+import pl.kondziet.springbackend.domain.model.valueobjects.UserId;
 
 public interface AuthenticationPrincipalUseCase {
 
