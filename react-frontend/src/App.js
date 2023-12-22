@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import AppLayout from "./components/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoutes from "./api/ProtectedRoutes";
+import OAuth2Redirect from "./components/OAuth2Redirect";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
                   <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
             </Route>
+            <Route path="/oauth2/redirect" element={<OAuth2Redirect />} />
+            <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </AuthenticationProvider>
       </BrowserRouter>
