@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.oauth2;
+package pl.kondziet.springbackend.infrastructure.security.oauth2;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,8 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-import pl.kondziet.springbackend.security.userdetails.AppUserDetails;
-import pl.kondziet.springbackend.security.token.GenerateTokenService;
+import pl.kondziet.springbackend.infrastructure.security.token.GenerateTokenService;
+import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
 
 import java.io.IOException;
 

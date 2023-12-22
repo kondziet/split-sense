@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.token;
+package pl.kondziet.springbackend.infrastructure.security.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

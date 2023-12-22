@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.userdetails;
+package pl.kondziet.springbackend.infrastructure.security.userdetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import pl.kondziet.springbackend.security.oauth2.OAuth2Provider;
+import pl.kondziet.springbackend.infrastructure.security.oauth2.OAuth2Provider;
 
 import java.util.Collection;
 import java.util.Map;

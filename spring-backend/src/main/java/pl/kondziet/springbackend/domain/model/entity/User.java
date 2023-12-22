@@ -1,11 +1,11 @@
-package pl.kondziet.springbackend.model.entity;
+package pl.kondziet.springbackend.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.kondziet.springbackend.security.oauth2.OAuth2Provider;
+import pl.kondziet.springbackend.infrastructure.security.oauth2.OAuth2Provider;
 
 import java.util.UUID;
 

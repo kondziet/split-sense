@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.oauth2;
+package pl.kondziet.springbackend.infrastructure.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -6,9 +6,9 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-import pl.kondziet.springbackend.model.entity.User;
+import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
+import pl.kondziet.springbackend.domain.model.entity.User;
 import pl.kondziet.springbackend.repository.UserRepository;
-import pl.kondziet.springbackend.security.userdetails.AppUserDetails;
 
 import java.util.List;
 import java.util.Optional;

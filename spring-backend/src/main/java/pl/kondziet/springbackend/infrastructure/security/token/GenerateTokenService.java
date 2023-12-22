@@ -1,9 +1,9 @@
-package pl.kondziet.springbackend.security.token;
+package pl.kondziet.springbackend.infrastructure.security.token;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.security.userdetails.AppUserDetails;
+import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
 
 import java.util.Map;
 

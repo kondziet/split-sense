@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.token;
+package pl.kondziet.springbackend.infrastructure.security.token;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.kondziet.springbackend.security.token.JwtFacade;
 
 import java.io.IOException;
 

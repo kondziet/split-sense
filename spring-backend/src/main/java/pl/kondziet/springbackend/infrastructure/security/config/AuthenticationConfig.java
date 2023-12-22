@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.config;
+package pl.kondziet.springbackend.infrastructure.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

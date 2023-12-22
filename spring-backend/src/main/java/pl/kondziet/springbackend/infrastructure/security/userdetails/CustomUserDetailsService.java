@@ -1,11 +1,11 @@
-package pl.kondziet.springbackend.security.userdetails;
+package pl.kondziet.springbackend.infrastructure.security.userdetails;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.model.entity.User;
+import pl.kondziet.springbackend.domain.model.entity.User;
 import pl.kondziet.springbackend.repository.UserRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.security.config;
+package pl.kondziet.springbackend.infrastructure.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pl.kondziet.springbackend.security.token.TokenAuthenticationFilter;
-import pl.kondziet.springbackend.security.oauth2.CustomAuthenticationSuccessHandler;
-import pl.kondziet.springbackend.security.oauth2.CustomOAuth2UserService;
+import pl.kondziet.springbackend.infrastructure.security.token.TokenAuthenticationFilter;
+import pl.kondziet.springbackend.infrastructure.security.oauth2.CustomAuthenticationSuccessHandler;
+import pl.kondziet.springbackend.infrastructure.security.oauth2.CustomOAuth2UserService;
 
 @RequiredArgsConstructor
 @Configuration
