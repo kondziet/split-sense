@@ -3,14 +3,12 @@ package pl.kondziet.springbackend.infrastructure.security.token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -39,7 +37,7 @@ public class JwtFacade {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        String userEmail = extractUserEmail(token);
+        String userEmail = extractUsername(token);
         return userEmail.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
@@ -51,7 +49,7 @@ public class JwtFacade {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String extractUserEmail(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

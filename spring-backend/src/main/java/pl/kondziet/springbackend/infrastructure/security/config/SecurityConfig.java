@@ -31,7 +31,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.GET, "/").permitAll();
-                    request.requestMatchers("/authentication/**", "/oauth2/**").permitAll();
+                    request.requestMatchers("/api/authentication/**", "/oauth2/**").permitAll();
                     request.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2Login -> {

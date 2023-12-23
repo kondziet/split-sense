@@ -34,7 +34,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = authorizationHeader.substring(7);
-        String userEmail = jwtFacade.extractUserEmail(token);
+        String userEmail = jwtFacade.extractUsername(token);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
