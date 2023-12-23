@@ -5,8 +5,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import pl.kondziet.springbackend.application.service.UserService;
 import pl.kondziet.springbackend.domain.model.entity.User;
-import pl.kondziet.springbackend.repository.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userService;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {

@@ -6,9 +6,9 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+import pl.kondziet.springbackend.application.service.UserService;
 import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
 import pl.kondziet.springbackend.domain.model.entity.User;
-import pl.kondziet.springbackend.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userService;
+    private final UserService userService;
     private final List<OAuth2UserInfoExtractor> oAuth2UserInfoExtractors;
 
     @Override
