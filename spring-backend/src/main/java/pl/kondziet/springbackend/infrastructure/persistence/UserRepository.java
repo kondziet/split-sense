@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.repository;
+package pl.kondziet.springbackend.infrastructure.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.kondziet.springbackend.domain.model.entity.User;
