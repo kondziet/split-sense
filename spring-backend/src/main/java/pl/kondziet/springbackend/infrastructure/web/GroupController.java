@@ -34,7 +34,7 @@ public class GroupController {
                 .status(HttpStatus.OK)
                 .body(groups.stream()
                         .map(group -> new GroupResponse(group.getName(), group.getCurrency()))
-                        .collect(Collectors.toList())
+                        .toList()
                 );
     }
 
