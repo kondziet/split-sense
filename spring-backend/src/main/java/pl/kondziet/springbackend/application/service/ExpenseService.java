@@ -10,6 +10,7 @@ import pl.kondziet.springbackend.infrastructure.persistence.ExpenseRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -18,6 +19,10 @@ import java.util.stream.Collectors;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
+
+    public List<GroupExpense> loadGroupExpenses(UUID groupId) {
+        return expenseRepository.findAllByGroup_Id(groupId);
+    }
 
     public GroupExpense createGroupExpense(CreateGroupExpenseCommand command) {
 

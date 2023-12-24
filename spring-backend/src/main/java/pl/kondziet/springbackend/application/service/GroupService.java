@@ -10,6 +10,7 @@ import pl.kondziet.springbackend.domain.model.entity.User;
 import pl.kondziet.springbackend.infrastructure.persistence.GroupRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -20,6 +21,9 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMembershipService groupMembershipService;
 
+    public Optional<Group> loadGroupById(UUID groupId) {
+        return groupRepository.findById(groupId);
+    }
     public List<Group> loadUserGroups(UUID userId) {
         return groupRepository.findByMemberships_User_Id(userId);
     }
