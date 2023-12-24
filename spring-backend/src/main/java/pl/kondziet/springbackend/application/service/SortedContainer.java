@@ -94,6 +94,10 @@ public class SortedContainer<T extends Comparable<T>> {
         return sortedData[leftIndex + index];
     }
 
+    public T[] getData() {
+        return Arrays.copyOfRange(sortedData, leftIndex, rightIndex + 1);
+    }
+
     public int size() {
         return (rightIndex - leftIndex) + 1;
     }
