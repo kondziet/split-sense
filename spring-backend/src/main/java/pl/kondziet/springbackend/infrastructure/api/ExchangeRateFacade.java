@@ -1,8 +1,9 @@
-package pl.kondziet.springbackend.application.exchangerate;
+package pl.kondziet.springbackend.infrastructure.api;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import pl.kondziet.springbackend.application.service.dto.ExchangeRateResponse;
 import pl.kondziet.springbackend.domain.model.valueobjects.ExchangeRate;
 
 @Component

@@ -13,7 +13,6 @@ import pl.kondziet.springbackend.domain.model.entity.Group;
 import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController

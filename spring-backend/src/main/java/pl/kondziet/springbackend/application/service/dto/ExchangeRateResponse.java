@@ -1,4 +1,4 @@
-package pl.kondziet.springbackend.application.exchangerate;
+package pl.kondziet.springbackend.application.service.dto;
 
 import java.math.BigDecimal;
 import java.util.Map;

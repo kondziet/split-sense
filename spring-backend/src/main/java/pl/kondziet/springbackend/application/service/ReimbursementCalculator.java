@@ -18,6 +18,10 @@ public class ReimbursementCalculator {
 
         List<Reimbursement> reimbursements = new ArrayList<>();
 
+        if (balances.size() <= 1) {
+            return reimbursements;
+        }
+
         while (!balances.isEmpty()) {
             Balance maxBalance = balances.getMax();
             Balance minBalance = balances.getMin();
