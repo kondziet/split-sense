@@ -33,7 +33,6 @@ public class ExchangeRateFacade {
         Pair<String, String> currencyPair = Pair.of(baseCurrency, targetCurrency);
         Pair<ExchangeRate, LocalDateTime> cached = getExchangeRateFromCache(currencyPair);
         if (Objects.isNull(cached) || isExpired(cached.getRight())) {
-            System.out.println("API");
             ExchangeRate exchangeRate = getExchangeRateFromApi(currencyPair);
             exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, LocalDateTime.now()));
             return exchangeRate;
