@@ -38,8 +38,15 @@ public class BootLoader implements CommandLineRunner {
                 .password(passwordEncoder.encode("cookies"))
                 .build();
 
+        User user3 = User.builder()
+                .username("michael")
+                .email("michael@gmail.com")
+                .password(passwordEncoder.encode("hooters"))
+                .build();
+
         User savedUser1 = userService.save(user1);
         User savedUser2 = userService.save(user2);
+        User savedUser3 = userService.save(user3);
 
         groupService.createGroup(CreateGroupCommand.builder()
                 .groupName("farm lovers")
@@ -56,6 +63,15 @@ public class BootLoader implements CommandLineRunner {
                         .build())
                 .group(groups.stream().findFirst().get())
                 .user(savedUser2)
+                .build());
+
+        groupMembershipService.save(GroupMembership.builder()
+                .id(GroupMembership.UserGroupId.builder()
+                        .userId(savedUser3.getId())
+                        .groupId(groups.stream().findFirst().get().getId())
+                        .build())
+                .group(groups.stream().findFirst().get())
+                .user(savedUser3)
                 .build());
     }
 }
