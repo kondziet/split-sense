@@ -28,6 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .email(user.getEmail())
+                .imageUrl(user.getImageUrl())
                 .authorities(authorities)
                 .build();
     }
