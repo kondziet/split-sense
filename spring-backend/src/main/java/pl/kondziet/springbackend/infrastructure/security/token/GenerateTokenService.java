@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.kondziet.springbackend.infrastructure.security.userdetails.AppUserDetails;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class GenerateTokenService {
 
         return jwtFacade.buildToken(
                 userDetails,
-                Map.of("providerId", "splitsense.com"),
+                new HashMap<>(),
                 accessTokenExpiration
         );
     }
@@ -31,7 +32,7 @@ public class GenerateTokenService {
 
         return jwtFacade.buildToken(
                 userDetails,
-                Map.of("providerId", "splitsense.com"),
+                new HashMap<>(),
                 refreshTokenExpiration
         );
     }
