@@ -18,15 +18,17 @@ public class ExchangeRateFacade {
     private final RestClient restClient;
     private final String apiKey;
     private final Map<Pair<String, String>, Pair<ExchangeRate, LocalDateTime>> exchangeRateCache = new HashMap<>();
-    private final Duration cacheDuration = Duration.ofMinutes(1);
+    private final CacheTimeConfig cacheTimeConfig;
 
     public ExchangeRateFacade(@Value("${exchange-rate.api-url}") String apiUrl,
-                              @Value("${exchange-rate.api-key}") String apiKey) {
+                              @Value("${exchange-rate.api-key}") String apiKey,
+                              CacheTimeConfig cacheTimeConfig) {
 
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
                 .build();
         this.apiKey = apiKey;
+        this.cacheTimeConfig = cacheTimeConfig;
     }
 
     public ExchangeRate loadExchangeRate(String baseCurrency, String targetCurrency) {
@@ -34,7 +36,7 @@ public class ExchangeRateFacade {
         Pair<ExchangeRate, LocalDateTime> cached = getExchangeRateFromCache(currencyPair);
         if (Objects.isNull(cached) || isExpired(cached.getRight())) {
             ExchangeRate exchangeRate = getExchangeRateFromApi(currencyPair);
-            exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, LocalDateTime.now()));
+            exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, cacheTimeConfig.getCurrentTime()));
             return exchangeRate;
         } else {
             return cached.getLeft();
@@ -61,6 +63,6 @@ public class ExchangeRateFacade {
         return exchangeRateCache.get(currencyPair);
     }
     private boolean isExpired(LocalDateTime fetchTime) {
-        return fetchTime.plus(cacheDuration).isBefore(LocalDateTime.now());
+        return fetchTime.plus(cacheTimeConfig.getCacheDuration()).isBefore(cacheTimeConfig.getCurrentTime());
     }
 }
