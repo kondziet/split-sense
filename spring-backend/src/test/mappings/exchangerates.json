@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/latest"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "data": {
+        "USD": "3.88",
+        "EUR": "4.55",
+        "GBP": "5.01",
+        "CHF": "4.12"
+      }
+    }
+  }
+}
