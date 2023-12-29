@@ -20,8 +20,8 @@ public class ExchangeRateFacade {
     private final Map<Pair<String, String>, Pair<ExchangeRate, LocalDateTime>> exchangeRateCache = new HashMap<>();
     private final CacheTimeConfig cacheTimeConfig;
 
-    public ExchangeRateFacade(@Value("${exchange-rate.api-url}") String apiUrl,
-                              @Value("${exchange-rate.api-key}") String apiKey,
+    public ExchangeRateFacade(@Value("${exchange-rate.api.url}") String apiUrl,
+                              @Value("${exchange-rate.api.key}") String apiKey,
                               CacheTimeConfig cacheTimeConfig) {
 
         this.restClient = RestClient.builder()

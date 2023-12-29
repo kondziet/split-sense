@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ExchangeRateFacadeTest {
 
-    @Value("${exchange-rate.api-key}")
+    @Value("${wiremock.api.key}")
     private String apiKey;
     @MockBean
     private CacheTimeConfig cacheTimeConfig;
@@ -32,10 +32,11 @@ class ExchangeRateFacadeTest {
     private static WireMockServer wireMockServer;
 
     @BeforeAll
-    static void beforeAll() {
-        wireMockServer = new WireMockServer(8081);
+    static void beforeAll(@Value("${wiremock.api.host}") String apiHost,
+                          @Value("${wiremock.api.port}") int apiPort) {
+        wireMockServer = new WireMockServer(apiPort);
         wireMockServer.start();
-        WireMock.configureFor("localhost", 8081);
+        WireMock.configureFor(apiHost, apiPort);
     }
 
     @AfterAll
@@ -50,105 +51,67 @@ class ExchangeRateFacadeTest {
     }
 
     @Test
-    public void testLoadExchangeRate() {
-
+    void testLoadExchangeRate() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
+        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
 
-        stubFor(get(urlPathEqualTo("/api/v1/latest"))
-                .withQueryParam("apikey", equalTo(apiKey))
-                .withQueryParam("base_currency", equalTo(baseCurrency))
-                .withQueryParam("currencies", equalTo(targetCurrency))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {
-                                    "data": {
-                                        "PLN": 3.8
-                                    }
-                                }
-                                """)));
+        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate("USD", "PLN");
-
-        assertThat(exchangeRate.rate()).isEqualTo(new BigDecimal("3.8"));
-        assertThat(exchangeRate.baseCurrency()).isEqualTo(baseCurrency);
-        assertThat(exchangeRate.targetCurrency()).isEqualTo(targetCurrency);
+        verifyExchangeRateResponse(1, baseCurrency, targetCurrency, exchangeRate, new BigDecimal("3.8"));
     }
 
     @Test
-    public void testLoadExchangeRateFromCache() {
-
+    void testLoadExchangeRateFromCache() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
+        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
 
-        stubFor(get(urlPathEqualTo("/api/v1/latest"))
-                .withQueryParam("apikey", equalTo(apiKey))
-                .withQueryParam("base_currency", equalTo(baseCurrency))
-                .withQueryParam("currencies", equalTo(targetCurrency))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {
-                                    "data": {
-                                        "PLN": 3.8
-                                    }
-                                }
-                                """)));
+        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
+        ExchangeRate exchangeRateFromCache = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate("USD", "PLN");
-        ExchangeRate exchangeRateFromCache = exchangeRateFacade.loadExchangeRate("USD", "PLN");
-
-        verify(1, getRequestedFor(urlPathEqualTo("/api/v1/latest")));
+        verifyExchangeRateResponse(1, baseCurrency, targetCurrency, exchangeRate, new BigDecimal("3.8"));
         assertThat(exchangeRate).isEqualTo(exchangeRateFromCache);
     }
 
     @Test
-    public void testLoadExchangeRateAfterCacheExpiration() {
-
+    void testLoadExchangeRateAfterCacheExpiration() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
 
-        when(cacheTimeConfig.getCurrentTime()).thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME);
+        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
+        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        stubFor(get(urlPathEqualTo("/api/v1/latest"))
-                .withQueryParam("apikey", equalTo(apiKey))
-                .withQueryParam("base_currency", equalTo(baseCurrency))
-                .withQueryParam("currencies", equalTo(targetCurrency))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {
-                                    "data": {
-                                        "PLN": 3.8
-                                    }
-                                }
-                                """)));
+        when(cacheTimeConfig.getCurrentTime())
+                .thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME.plus(CacheTimeConfig.DEFAULT_CACHE_DURATION_MINUTES.plusMinutes(1)));
 
-        ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate("USD", "PLN");
+        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.9);
+        ExchangeRate exchangeRateAfterCacheExpiration = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        when(cacheTimeConfig.getCurrentTime()).thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME.plus(CacheTimeConfig.DEFAULT_CACHE_DURATION_MINUTES.plusMinutes(1)));
-
-        stubFor(get(urlPathEqualTo("/api/v1/latest"))
-                .withQueryParam("apikey", equalTo(apiKey))
-                .withQueryParam("base_currency", equalTo(baseCurrency))
-                .withQueryParam("currencies", equalTo(targetCurrency))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {
-                                    "data": {
-                                        "PLN": 3.9
-                                    }
-                                }
-                                """)));
-        ExchangeRate exchangeRateAfterCacheExpiration = exchangeRateFacade.loadExchangeRate("USD", "PLN");
-
-        verify(2, getRequestedFor(urlPathEqualTo("/api/v1/latest")));
+        verifyExchangeRateResponse(2, baseCurrency, targetCurrency, exchangeRateAfterCacheExpiration, new BigDecimal("3.9"));
         assertThat(exchangeRate).isNotEqualTo(exchangeRateAfterCacheExpiration);
+    }
+
+    private void stubExchangeRateRequest(String baseCurrency, String targetCurrency, double rate) {
+        stubFor(get(urlPathEqualTo("/api/v1/latest"))
+                .withQueryParam("apikey", equalTo(apiKey))
+                .withQueryParam("base_currency", equalTo(baseCurrency))
+                .withQueryParam("currencies", equalTo(targetCurrency))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(String.format("{\"data\": {\"%s\": %s}}", targetCurrency, rate))));
+    }
+
+    private void verifyExchangeRateResponse(int expectedRequestCount, String baseCurrency, String targetCurrency,
+                                            ExchangeRate exchangeRate, BigDecimal expectedRate) {
+        verify(expectedRequestCount, getRequestedFor(urlPathEqualTo("/api/v1/latest"))
+                .withQueryParam("apikey", equalTo(apiKey))
+                .withQueryParam("base_currency", equalTo(baseCurrency))
+                .withQueryParam("currencies", equalTo(targetCurrency)));
+
+        assertThat(exchangeRate.rate()).isEqualTo(expectedRate);
+        assertThat(exchangeRate.baseCurrency()).isEqualTo(baseCurrency);
+        assertThat(exchangeRate.targetCurrency()).isEqualTo(targetCurrency);
     }
 }
