@@ -15,6 +15,7 @@ import pl.kondziet.springbackend.domain.model.valueobjects.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 
@@ -28,6 +29,8 @@ class ExchangeRateFacadeTest {
 
     @Value("${wiremock.api.key}")
     private String apiKey;
+    @Value("${exchange-rate.cache-expiration.minutes}")
+    private Duration cacheExpirationDuration;
     @MockBean
     private Clock clock;
     @Autowired
@@ -95,7 +98,11 @@ class ExchangeRateFacadeTest {
 
         ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        when(clock.instant()).thenReturn(Instant.parse("2021-01-01T02:00:00Z"));
+        when(clock.instant()).thenReturn(
+                Instant.parse("2021-01-01T02:00:00Z")
+                        .plus(cacheExpirationDuration)
+                        .plus(Duration.ofMinutes(1))
+        );
         when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
 
         stubExchangeRateRequest(baseCurrency, targetCurrency, rateAfterCacheExpiration);
