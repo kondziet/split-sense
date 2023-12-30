@@ -53,18 +53,21 @@ class ExchangeRateConverterTest {
 
         GroupExpense convertedExpense = exchangeRateConverter.convert(groupExpense);
 
-        Iterator<Debt> iterator = convertedExpense.getDebts().iterator();
-        assertThat(iterator.next().getMoney())
-                .isEqualTo(Money.builder()
-                        .amount(new BigDecimal("3.0625"))
-                        .currency("PLN")
-                        .build());
-
-        assertThat(iterator.next().getMoney())
-                .isEqualTo(Money.builder()
-                        .amount(new BigDecimal("1.1625"))
-                        .currency("PLN")
-                        .build());
+        assertThat(convertedExpense.getDebts())
+                .hasSameElementsAs(Set.of(
+                        Debt.builder()
+                                .money(Money.builder()
+                                        .amount(new BigDecimal("3.0625"))
+                                        .currency("PLN")
+                                        .build())
+                                .build(),
+                        Debt.builder()
+                                .money(Money.builder()
+                                        .amount(new BigDecimal("1.1625"))
+                                        .currency("PLN")
+                                        .build())
+                                .build()
+                ));
     }
 
     @Test
@@ -97,18 +100,21 @@ class ExchangeRateConverterTest {
 
         GroupExpense convertedExpense = exchangeRateConverter.convert(groupExpense);
 
-        Iterator<Debt> iterator = convertedExpense.getDebts().iterator();
-        assertThat(iterator.next().getMoney())
-                .isEqualTo(Money.builder()
-                        .amount(new BigDecimal("30.9326"))
-                        .currency("PLN")
-                        .build());
-
-        assertThat(iterator.next().getMoney())
-                .isEqualTo(Money.builder()
-                        .amount(new BigDecimal("96.441"))
-                        .currency("PLN")
-                        .build());
+        assertThat(convertedExpense.getDebts())
+                .contains(
+                        Debt.builder()
+                                .money(Money.builder()
+                                        .amount(new BigDecimal("30.9326"))
+                                        .currency("PLN")
+                                        .build())
+                                .build(),
+                        Debt.builder()
+                                .money(Money.builder()
+                                        .amount(new BigDecimal("96.441"))
+                                        .currency("PLN")
+                                        .build())
+                                .build()
+                );
     }
 
 
@@ -132,11 +138,15 @@ class ExchangeRateConverterTest {
 
         GroupExpense convertedExpense = exchangeRateConverter.convert(groupExpense);
 
-        assertThat(convertedExpense.getDebts().iterator().next().getMoney())
-                .isEqualTo(Money.builder()
-                        .amount(new BigDecimal("12.25"))
-                        .currency("PLN")
-                        .build());
+        assertThat(convertedExpense.getDebts())
+                .hasSameElementsAs(Set.of(
+                        Debt.builder()
+                                .money(Money.builder()
+                                        .amount(new BigDecimal("12.25"))
+                                        .currency("PLN")
+                                        .build())
+                                .build()
+                ));
         verify(exchangeRateFacade, never()).loadExchangeRate("PLN", "PLN");
     }
 }
