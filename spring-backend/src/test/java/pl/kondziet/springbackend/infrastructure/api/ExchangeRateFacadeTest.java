@@ -54,23 +54,30 @@ class ExchangeRateFacadeTest {
     void testLoadExchangeRate() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
-        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
+        String rate = String.valueOf(3.8);
+        stubExchangeRateRequest(baseCurrency, targetCurrency, rate);
 
         ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        verifyExchangeRateResponse(1, baseCurrency, targetCurrency, exchangeRate, new BigDecimal("3.8"));
+        verifyExchangeRateResponse(1, baseCurrency, targetCurrency);
+
+        assertThat(exchangeRate.rate()).isEqualTo(new BigDecimal(rate));
+        assertThat(exchangeRate.baseCurrency()).isEqualTo(baseCurrency);
+        assertThat(exchangeRate.targetCurrency()).isEqualTo(targetCurrency);
     }
 
     @Test
     void testLoadExchangeRateFromCache() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
-        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
+        String rate = String.valueOf(3.8);
+
+        stubExchangeRateRequest(baseCurrency, targetCurrency, rate);
 
         ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
         ExchangeRate exchangeRateFromCache = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        verifyExchangeRateResponse(1, baseCurrency, targetCurrency, exchangeRate, new BigDecimal("3.8"));
+        verifyExchangeRateResponse(1, baseCurrency, targetCurrency);
         assertThat(exchangeRate).isEqualTo(exchangeRateFromCache);
     }
 
@@ -78,21 +85,24 @@ class ExchangeRateFacadeTest {
     void testLoadExchangeRateAfterCacheExpiration() {
         String baseCurrency = "USD";
         String targetCurrency = "PLN";
+        String rate = String.valueOf(3.8);
+        String rateAfterCacheExpiration = String.valueOf(3.9);
 
-        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.8);
+        stubExchangeRateRequest(baseCurrency, targetCurrency, rate);
+
         ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
         when(cacheTimeConfig.getCurrentTime())
                 .thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME.plus(CacheTimeConfig.DEFAULT_CACHE_DURATION_MINUTES.plusMinutes(1)));
+        stubExchangeRateRequest(baseCurrency, targetCurrency, rateAfterCacheExpiration);
 
-        stubExchangeRateRequest(baseCurrency, targetCurrency, 3.9);
         ExchangeRate exchangeRateAfterCacheExpiration = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        verifyExchangeRateResponse(2, baseCurrency, targetCurrency, exchangeRateAfterCacheExpiration, new BigDecimal("3.9"));
+        verifyExchangeRateResponse(2, baseCurrency, targetCurrency);
         assertThat(exchangeRate).isNotEqualTo(exchangeRateAfterCacheExpiration);
     }
 
-    private void stubExchangeRateRequest(String baseCurrency, String targetCurrency, double rate) {
+    private void stubExchangeRateRequest(String baseCurrency, String targetCurrency, String rate) {
         stubFor(get(urlPathEqualTo("/api/v1/latest"))
                 .withQueryParam("apikey", equalTo(apiKey))
                 .withQueryParam("base_currency", equalTo(baseCurrency))
@@ -103,15 +113,10 @@ class ExchangeRateFacadeTest {
                         .withBody(String.format("{\"data\": {\"%s\": %s}}", targetCurrency, rate))));
     }
 
-    private void verifyExchangeRateResponse(int expectedRequestCount, String baseCurrency, String targetCurrency,
-                                            ExchangeRate exchangeRate, BigDecimal expectedRate) {
+    private void verifyExchangeRateResponse(int expectedRequestCount, String baseCurrency, String targetCurrency) {
         verify(expectedRequestCount, getRequestedFor(urlPathEqualTo("/api/v1/latest"))
                 .withQueryParam("apikey", equalTo(apiKey))
                 .withQueryParam("base_currency", equalTo(baseCurrency))
                 .withQueryParam("currencies", equalTo(targetCurrency)));
-
-        assertThat(exchangeRate.rate()).isEqualTo(expectedRate);
-        assertThat(exchangeRate.baseCurrency()).isEqualTo(baseCurrency);
-        assertThat(exchangeRate.targetCurrency()).isEqualTo(targetCurrency);
     }
 }
