@@ -6,7 +6,6 @@ import org.springframework.web.client.RestClient;
 import pl.kondziet.springbackend.application.service.dto.ExchangeRateResponse;
 import pl.kondziet.springbackend.domain.model.valueobjects.ExchangeRate;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +33,12 @@ public class ExchangeRateFacade {
     public ExchangeRate loadExchangeRate(String baseCurrency, String targetCurrency) {
         Pair<String, String> currencyPair = Pair.of(baseCurrency, targetCurrency);
         Pair<ExchangeRate, LocalDateTime> cached = getExchangeRateFromCache(currencyPair);
-        if (Objects.isNull(cached) || isExpired(cached.getRight())) {
+        if (Objects.isNull(cached) || isExpired(cached.right())) {
             ExchangeRate exchangeRate = getExchangeRateFromApi(currencyPair);
             exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, cacheTimeConfig.getCurrentTime()));
             return exchangeRate;
         } else {
-            return cached.getLeft();
+            return cached.left();
         }
     }
 
@@ -49,14 +48,14 @@ public class ExchangeRateFacade {
                 .uri(uriBuilder -> uriBuilder
                         .path("/latest")
                         .queryParam("apikey", apiKey)
-                        .queryParam("base_currency", currencyPair.getLeft())
-                        .queryParam("currencies", currencyPair.getRight())
+                        .queryParam("base_currency", currencyPair.left())
+                        .queryParam("currencies", currencyPair.right())
                         .build()
                 )
                 .retrieve()
                 .body(ExchangeRateResponse.class);
 
-        return new ExchangeRate(currencyPair.getLeft(), currencyPair.getRight(), response.data().get(currencyPair.getRight()));
+        return new ExchangeRate(currencyPair.left(), currencyPair.right(), response.data().get(currencyPair.right()));
     }
 
     private Pair<ExchangeRate, LocalDateTime> getExchangeRateFromCache(Pair<String, String> currencyPair) {
