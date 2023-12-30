@@ -24,14 +24,12 @@ public class CalculateGroupReimbursementService {
     public List<Reimbursement> calculateReimbursements(UUID groupId) {
         Group group = groupService.loadGroupById(groupId).orElseThrow();
         List<User> groupMembers = groupService.loadGroupMembers(groupId);
-
         List<GroupExpense> groupExpenses = expenseService.loadGroupExpenses(groupId);
-        List<GroupExpense> exchangedExpenses = groupExpenses.stream()
+
+        List<GroupExpense> convertedExpenses = groupExpenses.stream()
                 .map(exchangeRateConverter::convert)
                 .toList();
-
-        List<Balance> groupBalances = balanceCalculator.calculateGroupBalances(exchangedExpenses, group, groupMembers);
-
+        List<Balance> groupBalances = balanceCalculator.calculateGroupBalances(convertedExpenses, group, groupMembers);
         return reimbursementCalculator.calculateGroupReimbursements(groupBalances, group);
     }
 }
