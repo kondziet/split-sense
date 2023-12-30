@@ -6,6 +6,8 @@ import org.springframework.web.client.RestClient;
 import pl.kondziet.springbackend.application.service.dto.ExchangeRateResponse;
 import pl.kondziet.springbackend.domain.model.valueobjects.ExchangeRate;
 
+import java.time.Clock;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +19,20 @@ public class ExchangeRateFacade {
     private final RestClient restClient;
     private final String apiKey;
     private final Map<Pair<String, String>, Pair<ExchangeRate, LocalDateTime>> exchangeRateCache = new HashMap<>();
-    private final CacheTimeConfig cacheTimeConfig;
+    private final Clock clock;
+    private final Duration cacheExpirationDuration;
 
     public ExchangeRateFacade(@Value("${exchange-rate.api.url}") String apiUrl,
                               @Value("${exchange-rate.api.key}") String apiKey,
-                              CacheTimeConfig cacheTimeConfig) {
+                              @Value("${exchange-rate.cache-expiration.minutes}") long cacheExpirationMinutes,
+                              Clock clock) {
 
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
                 .build();
         this.apiKey = apiKey;
-        this.cacheTimeConfig = cacheTimeConfig;
+        this.clock = clock;
+        this.cacheExpirationDuration = Duration.ofMinutes(cacheExpirationMinutes);
     }
 
     public ExchangeRate loadExchangeRate(String baseCurrency, String targetCurrency) {
@@ -35,7 +40,7 @@ public class ExchangeRateFacade {
         Pair<ExchangeRate, LocalDateTime> cached = getExchangeRateFromCache(currencyPair);
         if (Objects.isNull(cached) || isExpired(cached.right())) {
             ExchangeRate exchangeRate = getExchangeRateFromApi(currencyPair);
-            exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, cacheTimeConfig.getCurrentTime()));
+            exchangeRateCache.put(currencyPair, Pair.of(exchangeRate, LocalDateTime.now(clock)));
             return exchangeRate;
         } else {
             return cached.left();
@@ -62,6 +67,6 @@ public class ExchangeRateFacade {
         return exchangeRateCache.get(currencyPair);
     }
     private boolean isExpired(LocalDateTime fetchTime) {
-        return fetchTime.plus(cacheTimeConfig.getCacheDuration()).isBefore(cacheTimeConfig.getCurrentTime());
+        return fetchTime.plus(cacheExpirationDuration).isBefore(LocalDateTime.now(clock));
     }
 }

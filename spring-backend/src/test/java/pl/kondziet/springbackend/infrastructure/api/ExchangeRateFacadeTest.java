@@ -14,6 +14,9 @@ import org.springframework.test.context.ActiveProfiles;
 import pl.kondziet.springbackend.domain.model.valueobjects.ExchangeRate;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +29,7 @@ class ExchangeRateFacadeTest {
     @Value("${wiremock.api.key}")
     private String apiKey;
     @MockBean
-    private CacheTimeConfig cacheTimeConfig;
+    private Clock clock;
     @Autowired
     private ExchangeRateFacade exchangeRateFacade;
     private static WireMockServer wireMockServer;
@@ -46,8 +49,8 @@ class ExchangeRateFacadeTest {
 
     @BeforeEach
     void setUp() {
-        when(cacheTimeConfig.getCurrentTime()).thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME);
-        when(cacheTimeConfig.getCacheDuration()).thenReturn(CacheTimeConfig.DEFAULT_CACHE_DURATION_MINUTES);
+        when(clock.instant()).thenReturn(Instant.parse("2021-01-01T00:00:00Z"));
+        when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
     }
 
     @Test
@@ -92,8 +95,9 @@ class ExchangeRateFacadeTest {
 
         ExchangeRate exchangeRate = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
 
-        when(cacheTimeConfig.getCurrentTime())
-                .thenReturn(CacheTimeConfig.DEFAULT_CURRENT_TIME.plus(CacheTimeConfig.DEFAULT_CACHE_DURATION_MINUTES.plusMinutes(1)));
+        when(clock.instant()).thenReturn(Instant.parse("2021-01-01T02:00:00Z"));
+        when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
+
         stubExchangeRateRequest(baseCurrency, targetCurrency, rateAfterCacheExpiration);
 
         ExchangeRate exchangeRateAfterCacheExpiration = exchangeRateFacade.loadExchangeRate(baseCurrency, targetCurrency);
