@@ -1,10 +1,7 @@
 package pl.kondziet.springbackend.application.service;
 
 import org.springframework.stereotype.Service;
-import pl.kondziet.springbackend.domain.model.entity.Debt;
-import pl.kondziet.springbackend.domain.model.entity.Group;
-import pl.kondziet.springbackend.domain.model.entity.GroupExpense;
-import pl.kondziet.springbackend.domain.model.entity.Money;
+import pl.kondziet.springbackend.domain.model.entity.*;
 import pl.kondziet.springbackend.domain.model.valueobjects.Balance;
 
 import java.util.List;
@@ -16,15 +13,13 @@ import java.util.stream.Collectors;
 @Service
 public class BalanceCalculator {
 
-    public List<Balance> calculateGroupBalances(List<GroupExpense> groupExpenses, Group group) {
+    public List<Balance> calculateGroupBalances(List<GroupExpense> groupExpenses, Group group, List<User> groupMembers) {
 
-        List<UUID> groupMembers = groupExpenses.stream()
-                .flatMap(expense -> expense.getDebts().stream())
-                .map(debt -> debt.getDebtor().getId())
-                .distinct()
+        List<UUID> groupMemberIds = groupMembers.stream()
+                .map(User::getId)
                 .toList();
 
-        Map<UUID, Money> balances = groupMembers.stream()
+        Map<UUID, Money> balances = groupMemberIds.stream()
                 .collect(Collectors.toMap(
                         userId -> userId,
                         val -> Money.zeroAmount(group.getCurrency())
