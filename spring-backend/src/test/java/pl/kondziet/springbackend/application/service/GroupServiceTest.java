@@ -5,21 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.kondziet.springbackend.application.service.command.CreateGroupCommand;
 import pl.kondziet.springbackend.domain.model.entity.Group;
+import pl.kondziet.springbackend.domain.model.entity.User;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Testcontainers
 @SpringBootTest
-@Sql(scripts = "classpath:script.sql")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class GroupServiceTest {
 
@@ -28,19 +26,24 @@ class GroupServiceTest {
     private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:alpine");
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private UserService userService;
 
     @Test
-    void createGroup() {
-        UUID userId = UUID.fromString("a550559d-3c3c-4dbd-9a80-2c6b045b3e91");
-
+    void createGroupAndAssignOwner() {
+        User savedUsed = userService.save(User.builder()
+                .username("test")
+                .password("test")
+                .email("test@test.com")
+                .build());
         CreateGroupCommand command = CreateGroupCommand.builder()
-                .groupName("Test group")
+                .groupName("test group")
                 .groupCurrency("PLN")
-                .groupOwnerId(userId)
+                .groupOwnerId(savedUsed.getId())
                 .build();
 
         Group group = groupService.createGroup(command);
-        List<Group> userGroups = groupService.loadUserGroups(userId);
+        List<Group> userGroups = groupService.loadUserGroups(savedUsed.getId());
 
         assertThat(group).isNotNull();
         assertThat(userGroups.stream().filter(g -> g.getId().equals(group.getId())).findFirst()).isPresent();
